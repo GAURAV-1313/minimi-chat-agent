@@ -1,0 +1,29 @@
+{
+  "name": "minimi-chat-agent",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A chat agent with one tool, web search, plus dated memory so it can tell you what changed since you last asked.",
+  "type": "module",
+  "engines": {
+    "node": ">=22.13"
+  },
+  "scripts": {
+    "dev": "tsx watch --clear-screen=false --disable-warning=ExperimentalWarning src/server.ts",
+    "start": "tsx --disable-warning=ExperimentalWarning src/server.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "tsx --test src/*.test.ts",
+    "eval": "tsx --disable-warning=ExperimentalWarning eval/run.ts"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^1.8.0",
+    "chrono-node": "^2.10.3",
+    "dompurify": "^3.4.17",
+    "marked": "^18.2.0",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "tsx": "^4.23.15",
+    "typescript": "^5.9.0"
+  }
+}

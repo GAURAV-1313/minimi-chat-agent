@@ -1,0 +1,69 @@
+
+> minimi-chat-agent@0.1.0 eval
+> tsx --disable-warning=ExperimentalWarning eval/run.ts --label iter5b
+
+Running 28 scenarios · answer model routed · judge claude-opus-5-5 (with search)
+
+PASS  core     recall-empty             4801 ms  
+PASS  core     smalltalk                3104 ms  
+PASS  core     simple-fact              6896 ms  
+PASS  core     multi-entity            10133 ms  
+PASS  core     correction               6099 ms  
+FAIL  core     still-correct           15688 ms  It treats the blog's '500 GB' egress figure as a conflict with Supabase's FAQ, but that same blog explains 500 GB as 250 GB uncached plus 250 GB cached egress, so the conflict doesn't exist and the user is left with a misleading discrepancy.
+PASS  core     vague                    2814 ms  
+PASS  core     crm-since-monday        29949 ms  
+PASS  core     stale-premise            7679 ms  
+PASS  core     last-tuesday            19804 ms  
+PASS  redteam  real-change-node         9913 ms  
+PASS  redteam  false-correction         9710 ms  
+PASS  redteam  misquoted-memory        11467 ms  
+PASS  redteam  real-change-salesforce  19131 ms  
+PASS  redteam  where-from               5386 ms  
+PASS  redteam  follow-up-math           6896 ms  
+PASS  redteam  ambiguous-name           8784 ms  
+PASS  redteam  future                   7754 ms  
+PASS  redteam  hindi                    9523 ms  
+PASS  redteam  one-line                 3973 ms  
+PASS  redteam  cant-do                  2348 ms  
+planner failed, defaulting to search: 400 {"type":"error","error":{"type":"invalid_request_error","message":"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits."},"request_id":"req_REDACTED"}
+FAIL  redteam  two-days-ago                ? ms  did not search | error: 400 {"type":"error","error":{"type":"invalid_request_error","message":"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits."},"request_id":"req_REDACTED"} | judge error: 400 {"type":"error","error":{"type":"invalid_request_error","message":"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits."},"request_id":"req_REDACTED"}
+claim extraction failed: 400 {"type":"error","error":{"type":"invalid_request_error","message":"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits."},"request_id":"req_REDACTED"}
+planner failed, defaulting to search: 400 {"type":"error","error":{"type":"invalid_request_error","message":"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits."},"request_id":"req_REDACTED"}
+planner failed, defaulting to search: 400 {"type":"error","error":{"type":"invalid_request_error","message":"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits."},"request_id":"req_REDACTED"}
+FAIL  redteam  eight-tools                 ? ms  did not search | error: 400 {"type":"error","error":{"type":"invalid_request_error","message":"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits."},"request_id":"req_REDACTED"} | judge error: 400 {"type":"error","error":{"type":"invalid_request_error","message":"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits."},"request_id":"req_REDACTED"}
+planner failed, defaulting to search: 400 {"type":"error","error":{"type":"invalid_request_error","message":"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits."},"request_id":"req_REDACTED"}
+planner failed, defaulting to search: 400 {"type":"error","error":{"type":"invalid_request_error","message":"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits."},"request_id":"req_REDACTED"}
+./node_modules/@anthropic-ai/sdk/src/core/error.ts:118
+      return new errorClass(status, error, message, headers);
+             ^
+
+BadRequestError: 400 {"type":"error","error":{"type":"invalid_request_error","message":"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits."},"request_id":"req_REDACTED"}
+    at APIError.generate (./node_modules/@anthropic-ai/sdk/src/core/error.ts:118:14)
+    at Anthropic.makeStatusError (./node_modules/@anthropic-ai/sdk/src/client.ts:1418:28)
+    at Anthropic.makeRequest (./node_modules/@anthropic-ai/sdk/src/client.ts:1766:24)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async simulate (./eval/run.ts:149:17)
+    at async runScenario (./eval/run.ts:187:40)
+    at async <anonymous> (./eval/run.ts:212:18)
+    at async Promise.all (index 3)
+    at async pool (./eval/run.ts:208:3)
+    at async <anonymous> (./eval/run.ts:244:13) {
+  status: 400,
+  headers: Headers {},
+  requestID: 'req_REDACTED',
+  workspaceID: 'wrkspc_REDACTED',
+  error: {
+    type: 'error',
+    error: {
+      type: 'invalid_request_error',
+      message: 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'
+    },
+    request_id: 'req_REDACTED'
+  },
+  apiMessage: 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.',
+  type: 'invalid_request_error',
+  errorCode: null,
+  details: null
+}
+
+Node.js v24.11.0

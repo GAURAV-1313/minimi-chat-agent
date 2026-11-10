@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>minimi · architecture</title>
+<style>
+  :root {
+    --bg: #fbfaf7; --panel: #ffffff; --text: #1d1c1a; --muted: #6d6a63; --line: #d9d4c7;
+    --code: #e8f0e6; --code-s: #4d7c47; --fast: #e6eef8; --fast-s: #3f6ea8; --big: #fbe9dc; --big-s: #c2410c;
+    --store: #f1ebf7; --store-s: #7a55a6; --ui: #f3f1ec; --ui-s: #8a857a;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #171614; --panel: #1f1e1b; --text: #ecebe7; --muted: #9c988f; --line: #3a3833;
+      --code: #1f2b1d; --code-s: #8fc486; --fast: #1c2533; --fast-s: #8db4e6; --big: #33210f; --big-s: #fb923c;
+      --store: #2a2133; --store-s: #c4a5e8; --ui: #24231f; --ui-s: #a8a398;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.6 ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  main { max-width: 1040px; margin: 0 auto; padding: 40px 20px 80px; }
+  h1 { font-size: 28px; letter-spacing: -0.02em; margin: 0 0 4px; }
+  h2 { font-size: 19px; margin: 48px 0 6px; letter-spacing: -0.01em; }
+  p.lede { color: var(--muted); margin: 0 0 8px; max-width: 760px; }
+  figure { margin: 16px 0 0; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 18px; overflow-x: auto; }
+  svg { display: block; min-width: 900px; width: 100%; height: auto; }
+  svg text { fill: var(--text); font: 13px ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  svg .t { font-weight: 600; font-size: 13.5px; }
+  svg .s { fill: var(--muted); font-size: 11.5px; }
+  svg .lane { fill: var(--muted); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; }
+  .code { fill: var(--code); stroke: var(--code-s); }
+  .fast { fill: var(--fast); stroke: var(--fast-s); }
+  .big { fill: var(--big); stroke: var(--big-s); }
+  .store { fill: var(--store); stroke: var(--store-s); }
+  .ui { fill: var(--ui); stroke: var(--ui-s); }
+  rect { stroke-width: 1.5; }
+  .arrow { stroke: var(--muted); stroke-width: 1.5; fill: none; marker-end: url(#a); }
+  .dash { stroke-dasharray: 5 4; }
+  .legend { display: flex; flex-wrap: wrap; gap: 14px; margin: 14px 0 0; font-size: 13px; color: var(--muted); }
+  .legend span::before { content: ""; display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; border: 1.5px solid; }
+  .l-code::before { background: var(--code); border-color: var(--code-s) !important; }
+  .l-fast::before { background: var(--fast); border-color: var(--fast-s) !important; }
+  .l-big::before { background: var(--big); border-color: var(--big-s) !important; }
+  .l-store::before { background: var(--store); border-color: var(--store-s) !important; }
+  ul.notes { max-width: 820px; padding-left: 20px; }
+  ul.notes li { margin: 4px 0; }
+  code { font: 0.9em ui-monospace, "SF Mono", Menlo, monospace; background: var(--ui); padding: 1px 5px; border-radius: 5px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>minimi: how a turn works</h1>
+  <p class="lede">A chat agent with one tool, web search, and a dated memory of every answer. Code handles everything that can be exact: dates, memory lookup, number checks. The models do only what needs judgment.</p>
+  <div class="legend">
+    <span class="l-code">Plain code (deterministic, ~0 ms)</span>
+    <span class="l-fast">Claude Haiku 5.5 (fast, cheap)</span>
+    <span class="l-big">Answer model, chosen per turn: Haiku / Sonnet 5.5 / Opus 5.5</span>
+    <span class="l-store">SQLite on the user's machine</span>
+  </div>
+
+  <h2>1 · The turn pipeline</h2>
+  <p class="lede">One planner call, one writer call, no sub-agents. The planner picks the turn type, and the turn type picks the writer: Haiku for chat, Sonnet for research, Opus for "what changed since" re-checks. Those were chosen by eval, not taste. The writer runs its searches server-side, several at once when the question has several parts.</p>
+  <figure>
+    <svg viewBox="0 0 1000 440" role="img" aria-label="Turn pipeline: prep, planner, writer with web search, guard, memory">
+      <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor" style="color: var(--muted)"/></marker></defs>
+
+      <!-- browser -->
+      <rect class="ui" x="10" y="150" width="120" height="96" rx="10"/>
+      <text class="t" x="24" y="176">Browser</text>
+      <text class="s" x="24" y="196">message +</text>
+      <text class="s" x="24" y="212">timezone</text>
+      <text class="s" x="24" y="230">(Intl API)</text>
+
+      <!-- 0 prep -->
+      <rect class="code" x="165" y="130" width="170" height="136" rx="10"/>
+      <text class="t" x="179" y="156">[0] Prep</text>
+      <text class="s" x="179" y="178">"Monday" → 2026-11-09</text>
+      <text class="s" x="179" y="195">in the user's timezone</text>
+      <text class="s" x="179" y="216">recall turns on that day</text>
+      <text class="s" x="179" y="233">+ their dated claims</text>
+      <text class="s" x="179" y="254">→ date window for writer</text>
+
+      <!-- 1 planner -->
+      <rect class="fast" x="370" y="130" width="170" height="136" rx="10"/>
+      <text class="t" x="384" y="156">[1] Planner</text>
+      <text class="s" x="384" y="178">intent: smalltalk · memory_only</text>
+      <text class="s" x="384" y="195">· recheck · search · clarify</text>
+      <text class="s" x="384" y="216">entities, topic keywords,</text>
+      <text class="s" x="384" y="233">neutral dated queries</text>
+      <text class="s" x="384" y="254">structured JSON · ~2 s</text>
+
+      <!-- 3 writer -->
+      <rect class="big" x="580" y="40" width="200" height="150" rx="10"/>
+      <text class="t" x="594" y="66">[3] Writer + web search</text>
+      <text class="s" x="594" y="88">Sonnet (search) · Opus (recheck)</text>
+      <text class="s" x="594" y="109">parallel searches, ≤ 6 per turn</text>
+      <text class="s" x="594" y="126">vendor pages first, page_age</text>
+      <text class="s" x="594" y="143">cites every claim</text>
+      <text class="s" x="594" y="164">queries stream live; answer</text>
+      <text class="s" x="594" y="180">lands once written (see 3)</text>
+
+      <rect class="big" x="580" y="230" width="200" height="86" rx="10"/>
+      <text class="t" x="594" y="256">[3'] Haiku 5.5, no tools</text>
+      <text class="s" x="594" y="278">smalltalk · memory_only</text>
+      <text class="s" x="594" y="295">· clarify: no search cost,</text>
+      <text class="s" x="594" y="311">thinking off → true streaming</text>
+
+      <!-- 4 guard -->
+      <rect class="code" x="815" y="100" width="170" height="110" rx="10"/>
+      <text class="t" x="829" y="126">[4] Guard</text>
+      <text class="s" x="829" y="148">a $ / % missing from its</text>
+      <text class="s" x="829" y="165">complete cited excerpt is</text>
+      <text class="s" x="829" y="182">flagged; truncated excerpt</text>
+      <text class="s" x="829" y="199">= unverifiable, not flagged</text>
+
+      <!-- 5 memory -->
+      <rect class="fast" x="580" y="350" width="200" height="66" rx="10"/>
+      <text class="t" x="594" y="376">[5] Claim extraction</text>
+      <text class="s" x="594" y="396">after the reply, off the clock</text>
+
+      <rect class="store" x="815" y="330" width="170" height="86" rx="10"/>
+      <text class="t" x="829" y="356">SQLite memory</text>
+      <text class="s" x="829" y="378">turns by local day (FTS5),</text>
+      <text class="s" x="829" y="395">cited evidence, claims</text>
+      <text class="s" x="829" y="410">(value, source, page date)</text>
+
+      <!-- arrows -->
+      <path class="arrow" d="M130 198 H160"/>
+      <path class="arrow" d="M335 198 H365"/>
+      <path class="arrow" d="M540 180 C560 180 560 115 575 115"/>
+      <path class="arrow" d="M540 220 C560 220 560 273 575 273"/>
+      <path class="arrow" d="M780 135 H810"/>
+      <path class="arrow" d="M780 273 C800 273 800 200 810 190"/>
+      <path class="arrow" d="M900 210 V325"/>
+      <path class="arrow dash" d="M780 383 H810"/>
+      <path class="arrow dash" d="M900 416 C900 428 250 428 250 270"/>
+      <text class="s" x="450" y="424">next turn: recall by day / topic</text>
+      <text class="s" x="822" y="232">save turn</text>
+      <text class="s" x="814" y="243">+ claims (async)</text>
+      <text class="s" x="140" y="16">SSE stream back to the browser: status → searches + results → answer → citations → sources</text>
+      <path class="arrow dash" d="M680 40 V26 H70 V145"/>
+    </svg>
+  </figure>
+  <ul class="notes">
+    <li><b>Why a planner at all?</b> Our earlier chatbot scored 4/28 on small talk until small talk got its own path ahead of search. Haiku decides in about two seconds, so "hi" never costs a search.</li>
+    <li><b>Why one writer and not sub-agents?</b> Across our past research runs, a sub-agent took a median 8.6 minutes. Parallel tool calls inside one model call give the same breadth in seconds.</li>
+    <li><b>Why a code guard and not an LLM judge?</b> A judge panel once passed six numbers that were all wrong. String matching costs nothing and adds no time. The first version flagged 36% of turns, nearly all false alarms caused by the API cutting excerpts at about 150 characters. It now flags only numbers missing from a <i>complete</i> excerpt: 6 flags across 428 replayed turns, all fair on hand review.</li>
+    <li><b>Why does the agent see its own sources?</b> Under pressure from a skeptical user it once denied searches it had made, because earlier turns reached it as plain text. Each earlier answer now comes back with its record: the URLs it cited and what those pages said.</li>
+  </ul>
+
+  <h2>2 · "Has anything changed since Monday?"</h2>
+  <p class="lede">A recheck is claim by claim. The agent knows what it said, when, and from which page, so it can re-check each claim and report <b>held</b>, <b>changed</b> or <b>couldn't verify</b>. It doesn't redo the research from scratch.</p>
+  <figure>
+    <svg viewBox="0 0 1000 300" role="img" aria-label="Recheck flow from a dated question to a per-claim status table">
+      <defs><marker id="b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor" style="color: var(--muted)"/></marker></defs>
+      <rect class="ui" x="10" y="30" width="210" height="96" rx="10"/>
+      <text class="t" x="24" y="56">User, Wed 11 Nov</text>
+      <text class="s" x="24" y="78">"On Monday we shortlisted 5 CRMs.</text>
+      <text class="s" x="24" y="95">Has any changed pricing or</text>
+      <text class="s" x="24" y="112">shipped something big since?"</text>
+
+      <rect class="code" x="260" y="30" width="190" height="96" rx="10"/>
+      <text class="t" x="274" y="56">Resolve + recall</text>
+      <text class="s" x="274" y="78">Monday = 2026-11-09</text>
+      <text class="s" x="274" y="95">turns WHERE local_date = …</text>
+      <text class="s" x="274" y="112">→ the CRM chat, 5 names</text>
+
+      <rect class="store" x="490" y="14" width="250" height="128" rx="10"/>
+      <text class="t" x="504" y="40">Claims from Monday</text>
+      <text class="s" x="504" y="62">HubSpot | Starter price | $… /seat</text>
+      <text class="s" x="504" y="79">Pipedrive | Growth price | $… /seat</text>
+      <text class="s" x="504" y="96">Salesforce | Pro Suite | $… /user</text>
+      <text class="s" x="504" y="113">…each with source URL</text>
+      <text class="s" x="504" y="130">and that page's date</text>
+
+      <rect class="big" x="780" y="30" width="210" height="96" rx="10"/>
+      <text class="t" x="794" y="56">Re-check today</text>
+      <text class="s" x="794" y="78">one search per vendor,</text>
+      <text class="s" x="794" y="95">in parallel: pricing page +</text>
+      <text class="s" x="794" y="112">"changes since 9 Nov"</text>
+
+      <path class="arrow" style="marker-end:url(#b)" d="M220 78 H255"/>
+      <path class="arrow" style="marker-end:url(#b)" d="M450 78 H485"/>
+      <path class="arrow" style="marker-end:url(#b)" d="M740 78 H775"/>
+      <path class="arrow" style="marker-end:url(#b)" d="M885 126 V170"/>
+
+      <rect class="big" x="260" y="176" width="730" height="110" rx="10"/>
+      <text class="t" x="276" y="202">Answer: bottom line first, then one row per item</text>
+      <text class="s" x="276" y="226">"No price changes for 4 of 5 since Monday; couldn't re-check Close." (as of 11 Nov 2026)</text>
+      <text class="s" x="276" y="250">Tool        | then (9 Nov)     | now (11 Nov)     | status</text>
+      <text class="s" x="276" y="268">HubSpot     | $…/seat          | $…/seat          | Held ✓     ·   Close | … | … | Couldn't verify</text>
+      <rect class="code" x="10" y="176" width="210" height="110" rx="10"/>
+      <text class="t" x="24" y="202">If memory is empty</text>
+      <text class="s" x="24" y="224">says so in one line,</text>
+      <text class="s" x="24" y="241">names the days it does have,</text>
+      <text class="s" x="24" y="258">then asks for the list or</text>
+      <text class="s" x="24" y="275">answers fresh. Never invents.</text>
+    </svg>
+  </figure>
+
+  <h2>3 · What the user sees, and when</h2>
+  <p class="lede">The page always shows what the agent is doing. A status line appears straight away and each search query as soon as it starts. With Claude's server-side search, thinking models (Sonnet, Opus) send the results and the answer together once the answer is written. Chat turns on Haiku stream word by word. The median turn across the eval is 6.6–6.9 s.</p>
+  <figure>
+    <svg viewBox="0 0 1000 150" role="img" aria-label="Timeline of a research turn">
+      <defs><marker id="c" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor" style="color: var(--muted)"/></marker></defs>
+      <path class="arrow" style="marker-end:url(#c)" d="M20 70 H985"/>
+      <rect class="code" x="20" y="40" width="40" height="60" rx="6"/><text class="s" x="22" y="120">prep</text>
+      <rect class="fast" x="60" y="40" width="90" height="60" rx="6"/><text class="s" x="70" y="120">planner</text>
+      <text class="s" x="64" y="30">"Searching HubSpot, …"</text>
+      <rect class="big" x="150" y="40" width="430" height="60" rx="6"/><text class="s" x="230" y="120">queries appear as they start; searches + writing run server-side</text>
+      <rect class="big" x="580" y="40" width="330" height="60" rx="6" style="opacity:.75"/><text class="s" x="600" y="120">results, answer and citations arrive together</text>
+      <rect class="code" x="910" y="40" width="40" height="60" rx="6"/><text class="s" x="904" y="120">guard</text>
+      <text class="s" x="905" y="30">sources, cost</text>
+      <rect class="store" x="950" y="40" width="30" height="60" rx="6"/><text class="s" x="905" y="140">save + claims</text>
+    </svg>
+  </figure>
+</main>
+</body>
+</html>

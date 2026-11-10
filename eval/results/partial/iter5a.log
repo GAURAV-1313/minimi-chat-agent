@@ -1,0 +1,67 @@
+
+> minimi-chat-agent@0.1.0 eval
+> tsx --disable-warning=ExperimentalWarning eval/run.ts --label iter5a
+
+Running 28 scenarios · answer model routed · judge claude-opus-5-5 (with search)
+
+PASS  core     smalltalk                2901 ms  
+PASS  core     recall-empty             5168 ms  
+PASS  core     multi-entity             9253 ms  
+PASS  core     simple-fact              6903 ms  
+PASS  core     correction               6416 ms  
+PASS  core     still-correct           30429 ms  
+PASS  core     last-tuesday            22744 ms  
+PASS  core     vague                    3222 ms  
+PASS  core     stale-premise            8792 ms  
+PASS  core     crm-since-monday        34526 ms  
+PASS  redteam  real-change-salesforce  11139 ms  
+PASS  redteam  real-change-node        12225 ms  
+PASS  redteam  false-correction        11516 ms  
+PASS  redteam  misquoted-memory         7597 ms  
+PASS  redteam  where-from               4645 ms  
+PASS  redteam  ambiguous-name           8265 ms  
+PASS  redteam  follow-up-math           7704 ms  
+PASS  redteam  future                   7023 ms  
+PASS  redteam  one-line                 4106 ms  
+PASS  redteam  hindi                   10058 ms  
+FAIL  redteam  this-week-news           8574 ms  The IPO item stops at the retracted $70–80 range and leaves out that Anthropic filed an updated S-1/A on 10 November setting $70–78 for 825M shares (about $1.4T valuation), so the answer reports a superseded detail as the current state.
+PASS  redteam  cant-do                  3260 ms  
+claim extraction failed: 400 {"type":"error","error":{"type":"invalid_request_error","message":"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits."},"request_id":"req_REDACTED"}
+planner failed, defaulting to search: 400 {"type":"error","error":{"type":"invalid_request_error","message":"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits."},"request_id":"req_REDACTED"}
+FAIL  redteam  eight-tools                 ? ms  did not search | error: 400 {"type":"error","error":{"type":"invalid_request_error","message":"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits."},"request_id":"req_REDACTED"} | judge error: 400 {"type":"error","error":{"type":"invalid_request_error","message":"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits."},"request_id":"req_REDACTED"}
+planner failed, defaulting to search: 400 {"type":"error","error":{"type":"invalid_request_error","message":"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits."},"request_id":"req_REDACTED"}
+planner failed, defaulting to search: 400 {"type":"error","error":{"type":"invalid_request_error","message":"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits."},"request_id":"req_REDACTED"}
+./node_modules/@anthropic-ai/sdk/src/core/error.ts:118
+      return new errorClass(status, error, message, headers);
+             ^
+
+BadRequestError: 400 {"type":"error","error":{"type":"invalid_request_error","message":"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits."},"request_id":"req_REDACTED"}
+    at APIError.generate (./node_modules/@anthropic-ai/sdk/src/core/error.ts:118:14)
+    at Anthropic.makeStatusError (./node_modules/@anthropic-ai/sdk/src/client.ts:1418:28)
+    at Anthropic.makeRequest (./node_modules/@anthropic-ai/sdk/src/client.ts:1766:24)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async simulate (./eval/run.ts:149:17)
+    at async runScenario (./eval/run.ts:187:40)
+    at async <anonymous> (./eval/run.ts:212:18)
+    at async Promise.all (index 3)
+    at async pool (./eval/run.ts:208:3)
+    at async <anonymous> (./eval/run.ts:244:13) {
+  status: 400,
+  headers: Headers {},
+  requestID: 'req_REDACTED',
+  workspaceID: 'wrkspc_REDACTED',
+  error: {
+    type: 'error',
+    error: {
+      type: 'invalid_request_error',
+      message: 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'
+    },
+    request_id: 'req_REDACTED'
+  },
+  apiMessage: 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.',
+  type: 'invalid_request_error',
+  errorCode: null,
+  details: null
+}
+
+Node.js v24.11.0

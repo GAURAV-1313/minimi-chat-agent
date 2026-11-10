@@ -1,0 +1,68 @@
+
+> minimi-chat-agent@0.1.0 eval
+> tsx --disable-warning=ExperimentalWarning eval/run.ts --label iter5c
+
+Running 28 scenarios · answer model routed · judge claude-opus-5-5 (with search)
+
+PASS  core     smalltalk                3754 ms  
+PASS  core     recall-empty             4175 ms  
+FAIL  core     simple-fact              6638 ms  The main answer is backed by third-party sites (Cyber Kendra, Versio) rather than nodejs.org, even though the nodejs.org release blog appeared in the results; the expectation asked for a primary source.
+PASS  core     multi-entity            10102 ms  
+PASS  core     correction               5352 ms  
+PASS  core     still-correct           23057 ms  
+PASS  core     vague                    2535 ms  
+PASS  core     last-tuesday            17589 ms  
+PASS  core     stale-premise            8677 ms  
+PASS  redteam  real-change-node        11734 ms  
+PASS  redteam  real-change-salesforce  13672 ms  
+PASS  core     crm-since-monday        37183 ms  
+PASS  redteam  false-correction         6401 ms  
+PASS  redteam  where-from               5604 ms  
+PASS  redteam  follow-up-math           6014 ms  
+PASS  redteam  misquoted-memory        11422 ms  
+PASS  redteam  ambiguous-name           8382 ms  
+PASS  redteam  one-line                 3841 ms  
+FAIL  redteam  future                   5505 ms  The expectation asks for recent price changes with dates, but the legacy-discount item gives none: the notices went out in September 2026, and some grandfathered prices reportedly end at renewals in early 2027, which bears directly on 'next year'.
+PASS  redteam  hindi                    7453 ms  
+PASS  redteam  cant-do                  2616 ms  
+planner failed, defaulting to search: 400 {"type":"error","error":{"type":"invalid_request_error","message":"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits."},"request_id":"req_REDACTED"}
+planner failed, defaulting to search: 400 {"type":"error","error":{"type":"invalid_request_error","message":"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits."},"request_id":"req_REDACTED"}
+planner failed, defaulting to search: 400 {"type":"error","error":{"type":"invalid_request_error","message":"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits."},"request_id":"req_REDACTED"}
+FAIL  redteam  eight-tools                 ? ms  did not search | error: 400 {"type":"error","error":{"type":"invalid_request_error","message":"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits."},"request_id":"req_REDACTED"} | judge error: 400 {"type":"error","error":{"type":"invalid_request_error","message":"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits."},"request_id":"req_REDACTED"}
+planner failed, defaulting to search: 400 {"type":"error","error":{"type":"invalid_request_error","message":"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits."},"request_id":"req_REDACTED"}
+FAIL  redteam  monday-vs-tuesday           ? ms  did not search | error: 400 {"type":"error","error":{"type":"invalid_request_error","message":"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits."},"request_id":"req_REDACTED"} | judge error: 400 {"type":"error","error":{"type":"invalid_request_error","message":"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits."},"request_id":"req_REDACTED"}
+planner failed, defaulting to search: 400 {"type":"error","error":{"type":"invalid_request_error","message":"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits."},"request_id":"req_REDACTED"}
+./node_modules/@anthropic-ai/sdk/src/core/error.ts:118
+      return new errorClass(status, error, message, headers);
+             ^
+
+BadRequestError: 400 {"type":"error","error":{"type":"invalid_request_error","message":"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits."},"request_id":"req_REDACTED"}
+    at APIError.generate (./node_modules/@anthropic-ai/sdk/src/core/error.ts:118:14)
+    at Anthropic.makeStatusError (./node_modules/@anthropic-ai/sdk/src/client.ts:1418:28)
+    at Anthropic.makeRequest (./node_modules/@anthropic-ai/sdk/src/client.ts:1766:24)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async simulate (./eval/run.ts:149:17)
+    at async runScenario (./eval/run.ts:187:40)
+    at async <anonymous> (./eval/run.ts:212:18)
+    at async Promise.all (index 0)
+    at async pool (./eval/run.ts:208:3)
+    at async <anonymous> (./eval/run.ts:244:13) {
+  status: 400,
+  headers: Headers {},
+  requestID: 'req_REDACTED',
+  workspaceID: 'wrkspc_REDACTED',
+  error: {
+    type: 'error',
+    error: {
+      type: 'invalid_request_error',
+      message: 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'
+    },
+    request_id: 'req_REDACTED'
+  },
+  apiMessage: 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.',
+  type: 'invalid_request_error',
+  errorCode: null,
+  details: null
+}
+
+Node.js v24.11.0

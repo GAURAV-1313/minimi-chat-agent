@@ -1,0 +1,21 @@
+<svg class="cat idle" viewBox="18 8 84 74" role="img" aria-label="Pip" xmlns="http://www.w3.org/2000/svg">
+  <g class="head">
+    <path class="ear ear-l" d="M30 40 L28 12 L52 28 Z" fill="#A39B92" stroke="#000" stroke-width="2.5" stroke-linejoin="round"/>
+    <path d="M33 34 L32 19 L45 28 Z" fill="#FFC9B3"/>
+    <path class="ear ear-r" d="M90 40 L92 12 L68 28 Z" fill="#F7EDE2" stroke="#000" stroke-width="2.5" stroke-linejoin="round"/>
+    <path d="M87 34 L88 19 L75 28 Z" fill="#FFC9B3"/>
+    <ellipse cx="60" cy="48" rx="34" ry="28" fill="#F7EDE2" stroke="#000" stroke-width="2.5"/>
+    <path d="M28 40 C32 26 46 21 56 22 C50 28 46 38 34 46 C31 45 29 43 28 40 Z" fill="#A39B92"/>
+    <g class="eyes-open">
+      <ellipse class="pupil" cx="47" cy="50" rx="3.6" ry="4.4" fill="#000"/>
+      <ellipse class="pupil" cx="73" cy="50" rx="3.6" ry="4.4" fill="#000"/>
+    </g>
+    <path d="M57 57 L63 57 L60 60.5 Z" fill="#FF8133" stroke="#FF8133" stroke-width="1.5" stroke-linejoin="round"/>
+    <path d="M54 63 Q57 66 60 63 Q63 66 66 63" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round"/>
+    <g stroke="#000" stroke-width="1.6" stroke-linecap="round" opacity=".55">
+      <path d="M36 58 L22 56"/><path d="M36 62 L23 64"/>
+      <path d="M84 58 L98 56"/><path d="M84 62 L97 64"/>
+    </g>
+  </g>
+  
+</svg>

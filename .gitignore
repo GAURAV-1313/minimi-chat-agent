@@ -1,0 +1,7 @@
+node_modules/
+.env
+data/
+# private working notes, not part of the submission
+LESSONS.md
+research/
+.claude/

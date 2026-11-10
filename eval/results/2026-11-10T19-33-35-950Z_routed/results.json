@@ -1,0 +1,2072 @@
+{
+  "summary": {
+    "model": "routed",
+    "judge": "claude-opus-5-5",
+    "rejudgeOf": null,
+    "date": "2026-11-10T19:33:35.950Z",
+    "passed": "8/10",
+    "medianFirstTokenMs": 6569,
+    "medianTotalMs": 6571,
+    "medianSearches": 2,
+    "totalCostUsd": 0.51,
+    "avgScores": {
+      "grounded": "3.90",
+      "fresh": "4.60",
+      "honest": "4.30",
+      "helpful": "4.40",
+      "concise": "4.30"
+    }
+  },
+  "results": [
+    {
+      "id": "smalltalk",
+      "category": "small talk",
+      "pass": true,
+      "rules": [],
+      "majors": [],
+      "verdict": {
+        "grounded": 5,
+        "fresh": 5,
+        "honest": 5,
+        "helpful": 5,
+        "concise": 5,
+        "failures": []
+      },
+      "setup": [],
+      "turns": [
+        {
+          "user": "hey! what can you actually do?",
+          "answer": "Hey! I'm a research assistant: I search the web for current information and answer with dated sources, like pricing, plan limits, version releases, or news. I also remember our earlier chats by date, so you can later ask what's changed since. What are you looking into?",
+          "searches": [],
+          "sources": [],
+          "evidence": [],
+          "unverified": [],
+          "meta": {
+            "intent": "smalltalk",
+            "model": "claude-haiku-5-5",
+            "planMs": 1873,
+            "firstTokenMs": 2645,
+            "totalMs": 3004,
+            "searches": 0,
+            "sourcesSeen": 0,
+            "recalledTurns": 0,
+            "unverifiedNumbers": 0,
+            "costUsd": 0.0002
+          },
+          "background": {}
+        }
+      ]
+    },
+    {
+      "id": "simple-fact",
+      "category": "simple current fact",
+      "pass": true,
+      "rules": [],
+      "majors": [],
+      "verdict": {
+        "grounded": 4,
+        "fresh": 5,
+        "honest": 5,
+        "helpful": 4,
+        "concise": 4,
+        "failures": [
+          {
+            "severity": "minor",
+            "issue": "The 28 October 2026 date for 26.13.0 is attributed to a truncated Wikipedia excerpt that cuts off before any date is shown, so the excerpt does not confirm it."
+          },
+          {
+            "severity": "minor",
+            "issue": "The claim that 26.13.0 is the 'first LTS release' of the 26 line goes beyond the evidence, which only says the 26 line became LTS on October 28."
+          },
+          {
+            "severity": "minor",
+            "issue": "The opening answer cites Wikipedia rather than the nodejs.org page that lists v26.13.0 as Latest LTS, which weakens the primary-source sourcing."
+          }
+        ]
+      },
+      "setup": [],
+      "turns": [
+        {
+          "user": "What's the latest stable release of Node.js?",
+          "answer": "The latest stable release is Node.js 26.13.0. Wikipedia lists it as the stable release, dated 28 October 2026. It's also the first LTS release of the 26 line (\"Lithium\"), which is supported until April 30, 2029.\n\n- **Security releases today:** Node.js planned new 26.x, 24.x and 22.x versions on or shortly after 11 November 2026. The nodejs.org pages I found still showed 26.13.0 as the latest, so I couldn't confirm that the patched versions are out yet. Check nodejs.org before upgrading.\n- **Alpha:** v27.0.0-alpha.0.0.0 is the latest alpha. It isn't for production use.",
+          "searches": [
+            "site:nodejs.org latest stable release November 2026",
+            "Node.js latest stable version November 2026"
+          ],
+          "sources": [
+            {
+              "id": 1,
+              "url": "https://nodejs.org/en/blog/vulnerability/november-2026-security-releases",
+              "title": "Node.js — Wednesday, November 11, 2026 Security Releases",
+              "pageAge": "6 days ago"
+            },
+            {
+              "id": 11,
+              "url": "https://convika.com/blog/nodejs-26-lts-which-version-to-run/",
+              "title": "Node.js 26 LTS on October 28: which version to run?",
+              "pageAge": "5 days ago"
+            },
+            {
+              "id": 13,
+              "url": "https://en.wikipedia.org/wiki/Node.js",
+              "title": "Node.js",
+              "pageAge": "5 days ago"
+            }
+          ],
+          "evidence": [
+            {
+              "text": "Wikipedia lists it as the stable release, dated 28 October 2026.",
+              "citedTexts": [
+                "# Node.js\n- **Original author**: Ryan Dahl\n- **Developer**: OpenJS Foundation\n- **Release**: May 27, 2009 (2009-05-27)\n- **Stable release**: 26.13.0 E..."
+              ],
+              "sourceIds": [
+                13
+              ]
+            },
+            {
+              "text": "is supported until April 30, 2029.",
+              "citedTexts": [
+                "Node.js 26 \"Lithium\" became LTS on October 28, 2026, and is supported until April 30, 2029, per the Node.js release schedule. "
+              ],
+              "sourceIds": [
+                11
+              ]
+            },
+            {
+              "text": "Node.js planned new 26.x, 24.x and 22.x versions on or shortly after 11 November 2026",
+              "citedTexts": [
+                "The Node.js project will release new versions of the 26.x, 24.x, 22.x releases lines on or shortly after, Wednesday, November 11, 2026 in order to add..."
+              ],
+              "sourceIds": [
+                1
+              ]
+            },
+            {
+              "text": "v27.0.0-alpha.0.0.0 is the latest alpha.",
+              "citedTexts": [
+                "## Release timing\nReleases will be available on, or shortly after, Wednesday, November 11, 2026.\n\nv26.13.0 Latest LTS v27.0.0-alpha.0.0.0 Latest Alpha..."
+              ],
+              "sourceIds": [
+                1
+              ]
+            }
+          ],
+          "unverified": [],
+          "meta": {
+            "intent": "search",
+            "model": "claude-sonnet-5-5",
+            "planMs": 1978,
+            "firstTokenMs": 6569,
+            "totalMs": 6571,
+            "searches": 2,
+            "sourcesSeen": 16,
+            "recalledTurns": 0,
+            "unverifiedNumbers": 0,
+            "costUsd": 0.0244
+          },
+          "background": {}
+        }
+      ]
+    },
+    {
+      "id": "multi-entity",
+      "category": "multi-entity comparison",
+      "pass": false,
+      "rules": [],
+      "majors": [
+        "Netlify's '1 concurrent build' is backed only by a Vercel Workflow sentence, so the evidence does not support it for Netlify.",
+        "Vercel 'Commercial use: Not allowed' is cited to an on-demand rates table that says nothing about commercial use."
+      ],
+      "verdict": {
+        "grounded": 2,
+        "fresh": 4,
+        "honest": 3,
+        "helpful": 4,
+        "concise": 4,
+        "failures": [
+          {
+            "severity": "major",
+            "issue": "Netlify's '1 concurrent build' is backed only by a Vercel Workflow sentence, so the evidence does not support it for Netlify."
+          },
+          {
+            "severity": "major",
+            "issue": "Vercel 'Commercial use: Not allowed' is cited to an on-demand rates table that says nothing about commercial use."
+          },
+          {
+            "severity": "minor",
+            "issue": "Cloudflare's '500 builds/month' does not appear in the excerpt, which shows only '1 build at a time'."
+          },
+          {
+            "severity": "minor",
+            "issue": "The 4 Sept 2025 cutoff and the 100 GB legacy bandwidth are cited to a truncated table header that contains neither value."
+          },
+          {
+            "severity": "minor",
+            "issue": "Vercel's 100 GB, 1M invocations and 100 deployments/day come from truncated excerpts that cut off before the values."
+          },
+          {
+            "severity": "minor",
+            "issue": "The opening line is a general verdict, not a clear recommendation for this user's side project."
+          }
+        ]
+      },
+      "setup": [],
+      "turns": [
+        {
+          "user": "Compare the free tiers of Vercel, Netlify and Cloudflare Pages for a small side project.",
+          "answer": "All three work for a small side project. Cloudflare Pages is the most generous for static sites. Vercel's free tier is non-commercial only, and Netlify's is now a small credit pool. Figures are from vendor pages dated 5–82 days ago, as of 11 Nov 2026.\n\n| | Vercel Hobby | Netlify Free | Cloudflare Pages Free |\n|---|---|---|---|\n| Usage allowance | 100 GB fast data transfer, 1M function invocations | 300 credits/month, hard limit | Unlimited requests on a purely static project |\n| Builds | 100 deployments/day | 15 credits per production deploy; 1 concurrent build | 500 builds/month, 1 at a time |\n| Commercial use | Not allowed | Not shown in results | Not shown in results |\n| At the limit | Capped, no extra purchases | Projects pause until next cycle | Not shown in results |\n\n- **Netlify:** Accounts created after 4 Sept 2025 are on credit-based plans. Older accounts keep legacy plans, which had 100 GB bandwidth.\n- **Cloudflare:** Single files are capped at 25 MiB. Adding Functions brings a daily request limit on the free Workers plan. Cloudflare also says new projects should start on Workers.",
+          "searches": [
+            "site:vercel.com pricing Hobby plan limits",
+            "site:netlify.com pricing free plan limits",
+            "site:developers.cloudflare.com pages limits free plan"
+          ],
+          "sources": [
+            {
+              "id": 1,
+              "url": "https://vercel.com/pricing",
+              "title": "Vercel Pricing: Hobby, Pro, and Enterprise plans",
+              "pageAge": "82 days ago"
+            },
+            {
+              "id": 2,
+              "url": "https://vercel.com/docs/plans/hobby",
+              "title": "Vercel Hobby Plan",
+              "pageAge": "57 days ago"
+            },
+            {
+              "id": 5,
+              "url": "https://vercel.com/docs/limits",
+              "title": "Limits",
+              "pageAge": "55 days ago"
+            },
+            {
+              "id": 6,
+              "url": "https://vercel.com/docs/limits/fair-use-guidelines",
+              "title": "Fair Use Guidelines",
+              "pageAge": "57 days ago"
+            },
+            {
+              "id": 8,
+              "url": "https://vercel.com/docs/workflows/pricing",
+              "title": "Workflow Pricing and Limits",
+              "pageAge": "54 days ago"
+            },
+            {
+              "id": 12,
+              "url": "https://docs.netlify.com/manage/accounts-and-billing/billing/billing-for-credit-based-plans/credit-based-pricing-plans/",
+              "title": "Credit-based pricing plans",
+              "pageAge": "11 days ago"
+            },
+            {
+              "id": 13,
+              "url": "https://www.netlify.com/pricing/pro-vs-free/",
+              "title": "Pro vs Free Plan Comparison",
+              "pageAge": "47 days ago"
+            },
+            {
+              "id": 18,
+              "url": "https://docs.netlify.com/manage/accounts-and-billing/billing/billing-for-legacy-plans/legacy-pricing-plans/",
+              "title": "Legacy pricing plans",
+              "pageAge": "304 days ago"
+            },
+            {
+              "id": 22,
+              "url": "https://developers.cloudflare.com/pages/platform/limits/index.md",
+              "title": "Cloudflare",
+              "pageAge": null
+            },
+            {
+              "id": 25,
+              "url": "https://developers.cloudflare.com/pages/",
+              "title": "Overview · Cloudflare Pages docs",
+              "pageAge": "77 days ago"
+            },
+            {
+              "id": 28,
+              "url": "https://developers.cloudflare.com/pages/llms-full.txt",
+              "title": "Pages llms-full.txt",
+              "pageAge": "617 days ago"
+            }
+          ],
+          "evidence": [
+            {
+              "text": "100 GB fast data transfer, 1M function invocations",
+              "citedTexts": [
+                "| Resource | Hobby Included Usage |\n| --- | --- |\n| Global Config Reads | First 100,000 |\n| Global Config Writes | First 100 |\n| Fast Data Transfer | ..."
+              ],
+              "sourceIds": [
+                2
+              ]
+            },
+            {
+              "text": "300 credits/month, hard limit",
+              "citedTexts": [
+                "The Free plan **includes 300 credits/month with a hard limit** and no auto recharge option. "
+              ],
+              "sourceIds": [
+                12
+              ]
+            },
+            {
+              "text": "Unlimited requests on a purely static project",
+              "citedTexts": [
+                "## Functions invocation routes On a purely static project, Pages offers unlimited free requests. "
+              ],
+              "sourceIds": [
+                28
+              ]
+            },
+            {
+              "text": "100 deployments/day",
+              "citedTexts": [
+                "## General limits\n|  | Hobby | Pro | Enterprise |\n| --- | --- | --- | --- |\n| Projects | 200 | Unlimited | Unlimited |\n| Deployments Created per Day |..."
+              ],
+              "sourceIds": [
+                5
+              ]
+            },
+            {
+              "text": "15 credits per production deploy; 1 concurrent build",
+              "citedTexts": [
+                "Workflow Data Retained is not available on Hobby, and Vercel bills Pro usage on demand.\n\n",
+                "|\n| Production Deployments | 1 deployment | 15 credits | Publishing your web project live to your production branch. "
+              ],
+              "sourceIds": [
+                8,
+                12
+              ]
+            },
+            {
+              "text": "500 builds/month, 1 at a time",
+              "citedTexts": [
+                "Build limits depend on your plan:\n\n| | Free | Pro | Business | | --- | --- | --- | --- | | Builds | 1 build at a time | 5 concurrent builds | 20 concu..."
+              ],
+              "sourceIds": [
+                22
+              ]
+            },
+            {
+              "text": "Not allowed",
+              "citedTexts": [
+                "### Additional resources\n| Resource  | On-demand Rates  |\n| --- | --- |\n| Fast Data Transfer  | Regional |\n| Function Invocations  | $0.60 per 1,000,0..."
+              ],
+              "sourceIds": [
+                6
+              ]
+            },
+            {
+              "text": "Capped, no extra purchases",
+              "citedTexts": [
+                "If you have a free Hobby account, you are limited to the usage caps and cannot purchase additional usage.\n\n"
+              ],
+              "sourceIds": [
+                1
+              ]
+            },
+            {
+              "text": "Projects pause until next cycle",
+              "citedTexts": [
+                "When credits run out, projects pause until the next billing cycle. "
+              ],
+              "sourceIds": [
+                13
+              ]
+            },
+            {
+              "text": "credit-based plans",
+              "citedTexts": [
+                "### Legacy pricing plan details\nSection titled “Legacy pricing plan details”\n\n| Feature | Free & Starter Legacy plans | Pro Legacy plan | Enterprise p..."
+              ],
+              "sourceIds": [
+                18
+              ]
+            },
+            {
+              "text": "legacy plans",
+              "citedTexts": [
+                "### Legacy pricing plan details\nSection titled “Legacy pricing plan details”\n\n| Feature | Free & Starter Legacy plans | Pro Legacy plan | Enterprise p..."
+              ],
+              "sourceIds": [
+                18
+              ]
+            },
+            {
+              "text": "Single files are capped at 25 MiB",
+              "citedTexts": [
+                "| Free | Pro | Business | Enterprise | | --- | --- | --- | --- | | 100 | 250 | 500 | 500^1 |\n\n## File size\nThe maximum file size for a single Cloudfla..."
+              ],
+              "sourceIds": [
+                22
+              ]
+            },
+            {
+              "text": "Adding Functions brings a daily request limit",
+              "citedTexts": [
+                "The daily request limit for Pages Functions can be removed entirely by upgrading to [Workers Standard](https://developers.cloudflare.com/workers/platf..."
+              ],
+              "sourceIds": [
+                28
+              ]
+            },
+            {
+              "text": "new projects should start on Workers",
+              "citedTexts": [
+                "Start new projects with Workers."
+              ],
+              "sourceIds": [
+                25
+              ]
+            }
+          ],
+          "unverified": [],
+          "meta": {
+            "intent": "search",
+            "model": "claude-sonnet-5-5",
+            "planMs": 2056,
+            "firstTokenMs": 9547,
+            "totalMs": 9551,
+            "searches": 3,
+            "sourcesSeen": 30,
+            "recalledTurns": 0,
+            "unverifiedNumbers": 0,
+            "costUsd": 0.0389
+          },
+          "background": {}
+        }
+      ]
+    },
+    {
+      "id": "recall-empty",
+      "category": "recall with empty memory",
+      "pass": true,
+      "rules": [],
+      "majors": [],
+      "verdict": {
+        "grounded": 5,
+        "fresh": 5,
+        "honest": 5,
+        "helpful": 5,
+        "concise": 5,
+        "failures": []
+      },
+      "setup": [],
+      "turns": [
+        {
+          "user": "What did I ask you on 3 November? Is your answer still correct today?",
+          "answer": "I don't have any record of a conversation with you on 3 November (Tuesday), or on any other day, so I can't tell what you asked or re-check my answer.\n\nIf you tell me the question, or roughly what it was about (for example, a pricing comparison or a product release), I'll look up the current information and point out anything that has changed since 3 Nov.",
+          "searches": [],
+          "sources": [],
+          "evidence": [],
+          "unverified": [],
+          "meta": {
+            "intent": "recheck",
+            "model": "claude-opus-5-5",
+            "planMs": 1365,
+            "firstTokenMs": 2658,
+            "totalMs": 3821,
+            "searches": 0,
+            "sourcesSeen": 0,
+            "recalledTurns": 0,
+            "unverifiedNumbers": 0,
+            "costUsd": 0.0036
+          },
+          "background": {}
+        }
+      ]
+    },
+    {
+      "id": "crm-since-monday",
+      "category": "multi-entity delta with memory",
+      "pass": false,
+      "rules": [],
+      "majors": [
+        "It confidently says Monday's HubSpot Professional $100 figure was an error and the price is $90, but the cited HubSpot excerpt shows no price, while Monday's 4-day-old HubSpot catalog supported $100."
+      ],
+      "verdict": {
+        "grounded": 2,
+        "fresh": 3,
+        "honest": 3,
+        "helpful": 3,
+        "concise": 4,
+        "failures": [
+          {
+            "severity": "major",
+            "issue": "It confidently says Monday's HubSpot Professional $100 figure was an error and the price is $90, but the cited HubSpot excerpt shows no price, while Monday's 4-day-old HubSpot catalog supported $100."
+          },
+          {
+            "severity": "minor",
+            "issue": "'$100 monthly with an annual commitment' is muddled and unsupported by the cited excerpt."
+          },
+          {
+            "severity": "minor",
+            "issue": "It calls the Close page 'undated' though it is dated about 2,500 days old, and it ignores the excerpt's 'SAVE UP TO 50%' and Solo $19/$9 pricing, which may be a promotion or tier change."
+          },
+          {
+            "severity": "minor",
+            "issue": "It does not reconcile Monday's caveat that Pipedrive Ultimate may be $70 with today's blog figure of $79."
+          },
+          {
+            "severity": "minor",
+            "issue": "'HubSpot's Starter refresh' has no cited evidence, and the Momentum availability claim rests on a truncated excerpt."
+          }
+        ]
+      },
+      "setup": [
+        {
+          "user": "We're shortlisting CRMs for a 20-person sales team: HubSpot, Pipedrive, Salesforce, Zoho CRM and Close. Compare their per-seat pricing.",
+          "answer": "As of 9 Nov 2026, Close and Zoho are the cheapest per seat for a sales-focused team, and Salesforce is the priciest. All prices are USD per user per month on annual billing unless noted.\n\n| CRM | Entry | Mid tier | Top tier |\n|---|---|---|---|\n| HubSpot Sales Hub | Starter $20 per Core Seat | Professional $100 per Sales Seat, plus $1,500 one-time onboarding | Enterprise $150, plus $3,500 onboarding |\n| Pipedrive | Lite $14 | Growth $39, Premium $59 | Ultimate $79 |\n| Salesforce Sales Cloud | Starter Suite $25 | Pro Suite $100, Core $195 | Advanced $395, Max $550 |\n| Zoho CRM | Standard $14 | Professional $23, Enterprise $40 | Ultimate $52 |\n| Close | Essentials $35 | Growth $99 | Scale $139 |\n\nCaveats:\n- **HubSpot:** The list price is higher than the older $90 annual figure. HubSpot's own catalog now shows $100 for Professional, but a third-party guide still says $90 annual, $100 monthly. HubSpot is also running a promotion with Starter at up to 65% off for new customers.\n- **Pipedrive:** The pricing page I found is about a year old. A Pipedrive blog from about six weeks ago says Ultimate is $70, so confirm the current tiers before buying.\n- **Salesforce:** The dated pricing page I found was undated and may be stale. Add-ons such as the Web Services API at $25 extra per user on Pro Suite can raise the price.\n- **Zoho:** The edition comparison I used is Zoho's own USD PDF, and I couldn't confirm its date.",
+          "searches": [
+            "site:hubspot.com sales hub pricing per seat November 2026",
+            "site:pipedrive.com pricing per user November 2026",
+            "site:salesforce.com sales cloud pricing per user November 2026",
+            "site:zoho.com crm pricing per user November 2026",
+            "site:close.com pricing per user November 2026"
+          ],
+          "sources": [
+            {
+              "id": 1,
+              "url": "https://blog.hubspot.com/sales/hubspot-sales-hub-pricing",
+              "title": "HubSpot’s Sales Hub pricing guide — essential features for every rep",
+              "pageAge": "62 days ago"
+            },
+            {
+              "id": 3,
+              "url": "https://legal.hubspot.com/hubspot-product-and-services-catalog/products",
+              "title": "HubSpot Products & Services Catalog",
+              "pageAge": "4 days ago"
+            },
+            {
+              "id": 8,
+              "url": "https://www.hubspot.com/products/crm/starter",
+              "title": "HubSpot's Starter Plan for Startups & Small Businesses",
+              "pageAge": "47 days ago"
+            },
+            {
+              "id": 11,
+              "url": "https://www.pipedrive.com/en/pricing",
+              "title": "CRM Pricing Plans",
+              "pageAge": "376 days ago"
+            },
+            {
+              "id": 20,
+              "url": "https://www.pipedrive.com/en/blog/b2b-lead-generation-software",
+              "title": "B2B Online Lead Generation: Find the Best Online Sales Leads",
+              "pageAge": "42 days ago"
+            },
+            {
+              "id": 21,
+              "url": "https://www.salesforce.com/sales/pricing/",
+              "title": "Salesforce Sales Pricing",
+              "pageAge": "3749 days ago"
+            },
+            {
+              "id": 38,
+              "url": "https://www.zoho.com/sites/zweb/images/crm/zohocrm-edition-comparison-usd.pdf",
+              "title": "www.zoho.com/crm 1 Compare Zoho CRM Editions Features Free Standard",
+              "pageAge": null
+            },
+            {
+              "id": 41,
+              "url": "https://close.com/pricing",
+              "title": "Pricing",
+              "pageAge": "2500 days ago"
+            }
+          ],
+          "evidence": [
+            {
+              "text": "Starter $20 per Core Seat",
+              "citedTexts": [
+                "# HubSpot Product & Services Catalog\n## Sales Hub\n### Sales Hub Pricing\n| Feature  | Sales Hub Starter Starts at $20/month per Core Seat Get a demo of..."
+              ],
+              "sourceIds": [
+                3
+              ]
+            },
+            {
+              "text": "Professional $100 per Sales Seat, plus $1,500 one-time onboarding",
+              "citedTexts": [
+                "# HubSpot Product & Services Catalog\n## Sales Hub\n### Sales Hub Pricing\n| Feature  | Sales Hub Starter Starts at $20/month per Core Seat Get a demo of..."
+              ],
+              "sourceIds": [
+                3
+              ]
+            },
+            {
+              "text": "Enterprise $150, plus $3,500 onboarding",
+              "citedTexts": [
+                "# HubSpot Product & Services Catalog\n## Sales Hub\n### Sales Hub Pricing\n| Feature  | Sales Hub Starter Starts at $20/month per Core Seat Get a demo of..."
+              ],
+              "sourceIds": [
+                3
+              ]
+            },
+            {
+              "text": "Lite $14",
+              "citedTexts": [
+                "Billed monthly Billed annually(Save up to 42%)\n\nLite\n\nFocus on selling and let meeting intelligence handle the admin\n\nUS$14\n\nOne payment of US$ 168 pe..."
+              ],
+              "sourceIds": [
+                11
+              ]
+            },
+            {
+              "text": "Growth $39, Premium $59",
+              "citedTexts": [
+                "Meeting intelligence\n\nNew\n\nGrowth\n\nAutomate emails and follow-ups so you can focus on closing\n\nUS$39\n\nOne payment of US$ 468 per seat/year\n\nPer seat p...",
+                "Premium\n\nDrive success from lead to close with full-cycle sales tools\n\nUS$59\n\nOne payment of US$ 708 per seat/year\n\nPer seat per month, billed annuall..."
+              ],
+              "sourceIds": [
+                11
+              ]
+            },
+            {
+              "text": "Ultimate $79",
+              "citedTexts": [
+                "Enhanced customization for teams, reports and data fields\n\nUltimate\n\nOptimize performance with our complete suite of capabilities\n\nUS$79\n\n## Frequentl..."
+              ],
+              "sourceIds": [
+                11
+              ]
+            },
+            {
+              "text": "Starter Suite $25",
+              "citedTexts": [
+                "### Top features\n|  | Free Suite $ 0 user/month $ 0 user/month 0 € user/month AU$ 0 user/month 0 円 user/month 0 kr user/month £ 0 user/month  | Starte..."
+              ],
+              "sourceIds": [
+                21
+              ]
+            },
+            {
+              "text": "Pro Suite $100, Core $195",
+              "citedTexts": [
+                "### Top features\n|  | Free Suite $ 0 user/month $ 0 user/month 0 € user/month AU$ 0 user/month 0 円 user/month 0 kr user/month £ 0 user/month  | Starte..."
+              ],
+              "sourceIds": [
+                21
+              ]
+            },
+            {
+              "text": "Advanced $395, Max $550",
+              "citedTexts": [
+                "### Top features\n|  | Free Suite $ 0 user/month $ 0 user/month 0 € user/month AU$ 0 user/month 0 円 user/month 0 kr user/month £ 0 user/month  | Starte..."
+              ],
+              "sourceIds": [
+                21
+              ]
+            },
+            {
+              "text": "Standard $14",
+              "citedTexts": [
+                "Billed Annually Free for 3 users $14/user/month $23/user/month $40/user/month $52/user/month\n\nBilled Monthly Free for 3 users $20/user $35/user $50/us..."
+              ],
+              "sourceIds": [
+                38
+              ]
+            },
+            {
+              "text": "Professional $23, Enterprise $40",
+              "citedTexts": [
+                "Billed Annually Free for 3 users $14/user/month $23/user/month $40/user/month $52/user/month\n\nBilled Monthly Free for 3 users $20/user $35/user $50/us..."
+              ],
+              "sourceIds": [
+                38
+              ]
+            },
+            {
+              "text": "Ultimate $52",
+              "citedTexts": [
+                "Billed Annually Free for 3 users $14/user/month $23/user/month $40/user/month $52/user/month\n\nBilled Monthly Free for 3 users $20/user $35/user $50/us..."
+              ],
+              "sourceIds": [
+                38
+              ]
+            },
+            {
+              "text": "Essentials $35",
+              "citedTexts": [
+                "# Scale your sales team without adding headcount\n## Solo\nCore CRM for solo operators\n\n$19 per user / month$9 per user / month\n\nIncludes 500 AI credits..."
+              ],
+              "sourceIds": [
+                41
+              ]
+            },
+            {
+              "text": "Growth $99",
+              "citedTexts": [
+                "# Scale your sales team without adding headcount\n## Solo\nCore CRM for solo operators\n\n$19 per user / month$9 per user / month\n\nIncludes 500 AI credits..."
+              ],
+              "sourceIds": [
+                41
+              ]
+            },
+            {
+              "text": "Scale $139",
+              "citedTexts": [
+                "# Scale your sales team without adding headcount\n## Solo\nCore CRM for solo operators\n\n$19 per user / month$9 per user / month\n\nIncludes 500 AI credits..."
+              ],
+              "sourceIds": [
+                41
+              ]
+            },
+            {
+              "text": "$90 annual, $100 monthly",
+              "citedTexts": [
+                "Sales Hub Professional costs $90 per seat/month if billed annually and $100 per seat/month for monthly billing. "
+              ],
+              "sourceIds": [
+                1
+              ]
+            },
+            {
+              "text": "Starter at up to 65% off for new customers",
+              "citedTexts": [
+                "Starter is normally priced at $20/month per seat, but for a limited time, we’re offering new customers up to 65% off. "
+              ],
+              "sourceIds": [
+                8
+              ]
+            },
+            {
+              "text": "$70",
+              "citedTexts": [
+                "CRM-native lead management: Pipedrive’s all-in-one approach\n**How** **Pipedrive’s** **pricing** **works:** Plans range from the $14 Lite tier to the $..."
+              ],
+              "sourceIds": [
+                20
+              ]
+            },
+            {
+              "text": "Web Services API at $25 extra per user on Pro Suite",
+              "citedTexts": [
+                "|  | Free Suite $ 0 user/month $ 0 user/month 0 € user/month AU$ 0 user/month 0 円 user/month 0 kr user/month £ 0 user/month  | Starter Suite $ 25 user..."
+              ],
+              "sourceIds": [
+                21
+              ]
+            }
+          ],
+          "unverified": [
+            {
+              "value": "$100",
+              "sentence": "Professional $100 per Sales Seat, plus $1,500 one-time onboarding",
+              "sourceIds": [
+                3
+              ]
+            },
+            {
+              "value": "$1,500",
+              "sentence": "Professional $100 per Sales Seat, plus $1,500 one-time onboarding",
+              "sourceIds": [
+                3
+              ]
+            },
+            {
+              "value": "$150,",
+              "sentence": "Enterprise $150, plus $3,500 onboarding",
+              "sourceIds": [
+                3
+              ]
+            },
+            {
+              "value": "$3,500",
+              "sentence": "Enterprise $150, plus $3,500 onboarding",
+              "sourceIds": [
+                3
+              ]
+            },
+            {
+              "value": "$25",
+              "sentence": "Starter Suite $25",
+              "sourceIds": [
+                21
+              ]
+            },
+            {
+              "value": "$100,",
+              "sentence": "Pro Suite $100, Core $195",
+              "sourceIds": [
+                21
+              ]
+            },
+            {
+              "value": "$195",
+              "sentence": "Pro Suite $100, Core $195",
+              "sourceIds": [
+                21
+              ]
+            },
+            {
+              "value": "$395,",
+              "sentence": "Advanced $395, Max $550",
+              "sourceIds": [
+                21
+              ]
+            },
+            {
+              "value": "$550",
+              "sentence": "Advanced $395, Max $550",
+              "sourceIds": [
+                21
+              ]
+            },
+            {
+              "value": "$35",
+              "sentence": "Essentials $35",
+              "sourceIds": [
+                41
+              ]
+            },
+            {
+              "value": "$99",
+              "sentence": "Growth $99",
+              "sourceIds": [
+                41
+              ]
+            },
+            {
+              "value": "$139",
+              "sentence": "Scale $139",
+              "sourceIds": [
+                41
+              ]
+            },
+            {
+              "value": "$70",
+              "sentence": "$70",
+              "sourceIds": [
+                20
+              ]
+            }
+          ],
+          "meta": {
+            "intent": "search",
+            "model": "claude-sonnet-5-5",
+            "planMs": 2184,
+            "firstTokenMs": 15656,
+            "totalMs": 15667,
+            "searches": 5,
+            "sourcesSeen": 50,
+            "recalledTurns": 0,
+            "unverifiedNumbers": 13,
+            "costUsd": 0.0665
+          },
+          "background": {}
+        }
+      ],
+      "turns": [
+        {
+          "user": "On Monday we shortlisted 5 CRM tools for a 20-person sales team. Has any of them changed pricing or shipped something big since?",
+          "answer": "I found **no confirmed price changes and no major launches** from any of the five since Monday, 9 Nov. I did find one mistake in Monday's answer: HubSpot Professional is **$90**, not $100, on annual billing.\n\n| Item | Then (9 Nov) | Now (11 Nov) | Status |\n|---|---|---|---|\n| HubSpot Professional | $100 annual | $90/mo/seat paid annually; $100 monthly with an annual commitment | Changed (my error, not a price change) |\n| HubSpot Starter | $20, promo | $20 list; on 9 Nov new customers got $7 annual or $10 monthly (third-party) | Couldn't verify |\n| Pipedrive tiers | $14–$79 | Pricing page still a year old; a Pipedrive blog says $14 Lite to $79 Ultimate | Couldn't verify |\n| Salesforce tiers | $25–$550 | Same figures on an undated page: Starter $25, Max $550 | Couldn't verify |\n| Zoho tiers | $14–$52 | $14, $23, $40, $52 annual (undated Zoho page) | Couldn't verify |\n| Close tiers | $35–$139 | Essentials $35, Growth $99, Scale $139 (undated page) | Couldn't verify |\n\n**Launches:** the recent news is all from before Monday. That includes Salesforce's deal to acquire Cresta (2 Nov) and HubSpot's Starter refresh. Salesforce's Momentum conversation capture is available in November 2026, but I couldn't confirm the exact date.",
+          "searches": [
+            "site:hubspot.com sales hub pricing",
+            "site:pipedrive.com pricing plans",
+            "site:salesforce.com sales cloud pricing",
+            "site:zoho.com crm pricing",
+            "site:close.com pricing",
+            "CRM launch announcement November 2026 HubSpot Salesforce Pipedrive Zoho Close"
+          ],
+          "sources": [
+            {
+              "id": 3,
+              "url": "https://hubspot.com/pricing/sales?amp=&amp=",
+              "title": "Sales Software Pricing",
+              "pageAge": null
+            },
+            {
+              "id": 11,
+              "url": "https://www.pipedrive.com/en/blog/best-crm-software",
+              "title": "The best CRM software for your team, budget and stage",
+              "pageAge": "49 days ago"
+            },
+            {
+              "id": 20,
+              "url": "https://www.salesforce.com/ap/sales/pricing/?d=70130000000Ysao",
+              "title": "Salesforce Sales Pricing",
+              "pageAge": null
+            },
+            {
+              "id": 38,
+              "url": "https://www.zoho.com/crm/compare/microsoft-dynamics.html",
+              "title": "Zoho CRM vs Microsoft Dynamics 365",
+              "pageAge": null
+            },
+            {
+              "id": 39,
+              "url": "https://close.com/pricing",
+              "title": "Pricing",
+              "pageAge": "2500 days ago"
+            },
+            {
+              "id": 50,
+              "url": "https://forgex.ai/news/topics/crm-marketing-automation",
+              "title": "CRM & Marketing Automation news, vendors and releases (2026)",
+              "pageAge": "4 days ago"
+            },
+            {
+              "id": 52,
+              "url": "https://www.stork.ai/blog/close-alternatives-2026",
+              "title": "Close Alternatives (2026): Pipedrive, HubSpot, folk and More",
+              "pageAge": "1 days ago"
+            },
+            {
+              "id": 57,
+              "url": "https://streetinsider.com/Corporate+News/Salesforce+to+acquire+Cresta+in+AI+voice+agent+deal/27273501.html",
+              "title": "Salesforce to acquire Cresta in AI voice agent deal",
+              "pageAge": "7 days ago"
+            }
+          ],
+          "evidence": [
+            {
+              "text": "$90/mo/seat paid annually; $100 monthly with an annual commitment",
+              "citedTexts": [
+                "Includes:\n\nMARKETING\\_PRODUCTS Hub Free Marketing tools SALES\\_PRODUCTS Hub Free Sales tools SERVICE\\_HUB\\_PRODUCTS Hub Free Service tools CMS\\_HUB\\_P..."
+              ],
+              "sourceIds": [
+                3
+              ]
+            },
+            {
+              "text": "$20 list; on 9 Nov new customers got $7 annual or $10 monthly",
+              "citedTexts": [
+                "Sales Hub Starter lists at $20 a seat; on November 9 the page offered new customers $7 a seat paid annually or $10 month to month. "
+              ],
+              "sourceIds": [
+                52
+              ]
+            },
+            {
+              "text": "$14 Lite to $79 Ultimate",
+              "citedTexts": [
+                "**Pipedrive** **pricing:** Plans range from the $14 Lite tier to the $79 Ultimate option, with prices set per seat per month when billed annually.\n\n"
+              ],
+              "sourceIds": [
+                11
+              ]
+            },
+            {
+              "text": "Starter $25, Max $550",
+              "citedTexts": [
+                "|  | Free Suite $ 0 user/month $ 0 user/month 0 € user/month AU$ 0 user/month 0 円 user/month 0 kr user/month £ 0 user/month  | Starter Suite $ 25 user..."
+              ],
+              "sourceIds": [
+                20
+              ]
+            },
+            {
+              "text": "$14, $23, $40, $52 annual",
+              "citedTexts": [
+                "## Pricing comparison\nEdition\n\n/user/month billed annually/user/month billed monthly\n\n/user/month billed annually/user/month billed monthly\n\nFree · $0..."
+              ],
+              "sourceIds": [
+                38
+              ]
+            },
+            {
+              "text": "Essentials $35, Growth $99, Scale $139",
+              "citedTexts": [
+                "SAVE UP TO 50%\n\n## Solo\nCore CRM for solo operators\n\n$19 per user / month$9 per user / month\n\nIncludes 500 AI credits per user/month\n\n- Use Chloe & AI..."
+              ],
+              "sourceIds": [
+                39
+              ]
+            },
+            {
+              "text": "Salesforce's deal to acquire Cresta (2 Nov)",
+              "citedTexts": [
+                "(Updated - November 2, 2026 4:02 PM EST) Salesforce (NYSE: CRM) announced it has signed a definitive agreement to acquire Cresta, a company that devel..."
+              ],
+              "sourceIds": [
+                57
+              ]
+            },
+            {
+              "text": "available in November 2026",
+              "citedTexts": [
+                "Zoho CRM Oct 28\n\nZoho adds AI agents, a semantic layer and MCP access to Zoho Analytics\n\n#### Salesforce Winter '27 adds a Forecasting Agent and Momen..."
+              ],
+              "sourceIds": [
+                50
+              ]
+            }
+          ],
+          "unverified": [
+            {
+              "value": "$90",
+              "sentence": "$90/mo/seat paid annually; $100 monthly with an annual commitment",
+              "sourceIds": [
+                3
+              ]
+            },
+            {
+              "value": "$100",
+              "sentence": "$90/mo/seat paid annually; $100 monthly with an annual commitment",
+              "sourceIds": [
+                3
+              ]
+            },
+            {
+              "value": "$550",
+              "sentence": "Starter $25, Max $550",
+              "sourceIds": [
+                20
+              ]
+            },
+            {
+              "value": "$14,",
+              "sentence": "$14, $23, $40, $52 annual",
+              "sourceIds": [
+                38
+              ]
+            },
+            {
+              "value": "$23,",
+              "sentence": "$14, $23, $40, $52 annual",
+              "sourceIds": [
+                38
+              ]
+            },
+            {
+              "value": "$40,",
+              "sentence": "$14, $23, $40, $52 annual",
+              "sourceIds": [
+                38
+              ]
+            },
+            {
+              "value": "$52",
+              "sentence": "$14, $23, $40, $52 annual",
+              "sourceIds": [
+                38
+              ]
+            },
+            {
+              "value": "$35,",
+              "sentence": "Essentials $35, Growth $99, Scale $139",
+              "sourceIds": [
+                39
+              ]
+            },
+            {
+              "value": "$99,",
+              "sentence": "Essentials $35, Growth $99, Scale $139",
+              "sourceIds": [
+                39
+              ]
+            },
+            {
+              "value": "$139",
+              "sentence": "Essentials $35, Growth $99, Scale $139",
+              "sourceIds": [
+                39
+              ]
+            }
+          ],
+          "meta": {
+            "intent": "recheck",
+            "model": "claude-opus-5-5",
+            "planMs": 1637,
+            "firstTokenMs": 24384,
+            "totalMs": 24390,
+            "searches": 6,
+            "sourcesSeen": 58,
+            "recalledTurns": 1,
+            "unverifiedNumbers": 10,
+            "costUsd": 0.1043
+          },
+          "background": {}
+        }
+      ]
+    },
+    {
+      "id": "still-correct",
+      "category": "is it still correct?",
+      "pass": true,
+      "rules": [],
+      "majors": [],
+      "verdict": {
+        "grounded": 4,
+        "fresh": 5,
+        "honest": 4,
+        "helpful": 4,
+        "concise": 4,
+        "failures": [
+          {
+            "severity": "minor",
+            "issue": "The claim that the third-party tracker 'matches all four' unverified figures has no supporting excerpt; the cited text only shows the Nov 5 check date."
+          },
+          {
+            "severity": "minor",
+            "issue": "The pausing row shows '—' in the 3 Nov column, but the earlier answer did state that Pro never pauses and Free pauses after 1 week."
+          },
+          {
+            "severity": "minor",
+            "issue": "Email support, which the 3 Nov answer listed, is missing from the re-check table."
+          },
+          {
+            "severity": "minor",
+            "issue": "The current Pro price rests on a billing-example line item rather than the pricing page, which is weaker confirmation, and this isn't flagged."
+          }
+        ]
+      },
+      "setup": [
+        {
+          "user": "What's the cheapest paid plan on Supabase and what does it include?",
+          "answer": "The cheapest paid plan is Pro, which Supabase's pricing page lists from $25 a month, with the first project included. The page is cached and may be old, so check supabase.com/pricing. A third-party tracker said it verified the $25 price on 2 Nov 2026.\n\n**What Pro includes (on top of Free):**\n- 100,000 monthly active users, 8 GB disk per project, 250 GB egress and 100 GB file storage\n- Email support and daily backups stored for 7 days\n- $10/month in compute credits, enough to cover one Micro instance\n- Projects never pause, whereas Free projects pause after 1 week of inactivity\n\nUsage beyond these limits is billed. Extra projects add compute costs, which start at about $10 a month.",
+          "searches": [
+            "site:supabase.com pricing paid plans",
+            "Supabase Pro plan price includes November 2026"
+          ],
+          "sources": [
+            {
+              "id": 1,
+              "url": "https://supabase.com/pricing",
+              "title": "Pricing & Fees",
+              "pageAge": "403 days ago"
+            },
+            {
+              "id": 4,
+              "url": "https://supabase.com/docs/guides/platform/billing-faq",
+              "title": "Billing FAQ",
+              "pageAge": "19 days ago"
+            }
+          ],
+          "evidence": [
+            {
+              "text": "from $25 a month, with the first project included",
+              "citedTexts": [
+                "Get Started\n\nFrom\n\n$25\n\n/ month\n\nFirst project included. "
+              ],
+              "sourceIds": [
+                1
+              ]
+            },
+            {
+              "text": "100,000 monthly active users, 8 GB disk per project, 250 GB egress and 100 GB file storage",
+              "citedTexts": [
+                "Additional projects from $10/mo.See how pricing scales\n\nEverything in the Free Plan, plus:\n\n- 100,000 monthly active users then $0.00325 per MAU\n- 8 G..."
+              ],
+              "sourceIds": [
+                1
+              ]
+            },
+            {
+              "text": "Email support and daily backups stored for 7 days",
+              "citedTexts": [
+                "Additional projects from $10/mo.See how pricing scales\n\nEverything in the Free Plan, plus:\n\n- 100,000 monthly active users then $0.00325 per MAU\n- 8 G..."
+              ],
+              "sourceIds": [
+                1
+              ]
+            },
+            {
+              "text": "$10/month in compute credits, enough to cover one Micro instance",
+              "citedTexts": [
+                "Choose your plan\n\n$25/month\n\nEverything in the Free Plan, plus:\n\n100K monthly active users\n\n8 GB disk size per project\n\n250 GB bandwidth\n\nDaily backup..."
+              ],
+              "sourceIds": [
+                1
+              ]
+            },
+            {
+              "text": "Free projects pause after 1 week of inactivity",
+              "citedTexts": [
+                "## Fine-tune your project\n### Cost Control\nFlat fee $10/month\n\n### Custom Domain\nStarts from $100/month\n\n## Free\n$0\n\n/month\n\nPerfect for hobby project..."
+              ],
+              "sourceIds": [
+                1
+              ]
+            },
+            {
+              "text": "start at about $10 a month",
+              "citedTexts": [
+                "Additional projects start at ~$10 a month (billed hourly).\n\n"
+              ],
+              "sourceIds": [
+                4
+              ]
+            }
+          ],
+          "unverified": [
+            {
+              "value": "$10",
+              "sentence": "$10/month in compute credits, enough to cover one Micro instance",
+              "sourceIds": [
+                1
+              ]
+            }
+          ],
+          "meta": {
+            "intent": "search",
+            "model": "claude-sonnet-5-5",
+            "planMs": 1432,
+            "firstTokenMs": 6580,
+            "totalMs": 6581,
+            "searches": 2,
+            "sourcesSeen": 20,
+            "recalledTurns": 0,
+            "unverifiedNumbers": 1,
+            "costUsd": 0.0249
+          },
+          "background": {}
+        }
+      ],
+      "turns": [
+        {
+          "user": "What did I ask you on 3 November? Is your answer still correct today?",
+          "answer": "You asked me on 3 Nov: \"What's the cheapest paid plan on Supabase and what does it include?\" I said Pro, from $25 a month. As of 11 Nov 2026 I found no changes. Recently updated Supabase docs confirm 6 of the 10 figures I gave you. I couldn't check the other 4 because the only copy of Supabase's pricing page I can see is still the one from about 403 days ago.\n\n| Claim | 3 Nov | Now | Status |\n|---|---|---|---|\n| Pro price | $25/mo | Supabase's billing example shows Pro Plan, $25 | Held |\n| Extra project compute | ~$10/mo | Micro, ~$10 monthly | Held |\n| Compute credits | $10/mo | $10 in Compute Credits, which cover one project running on the Micro/Nano Compute size | Held |\n| Disk | 8 GB | 8 GB included, then $0.125 per GB | Held |\n| Egress | 250 GB | Pro: 250 GB / 250 GB (uncached / cached) | Held |\n| File storage | 100 GB | Pro: 100 GB | Held |\n| First project included | Yes | — | Couldn't verify |\n| 100k MAU | 100,000 | — | Couldn't verify |\n| 7-day backups | 7 days | — | Couldn't verify |\n| Pausing (Pro never pauses, Free pauses after 1 week) | — | — | Couldn't verify |\n\nA third-party tracker shows prices checked Nov 5, 2026, and its list matches all four of the figures I couldn't check. I found no announcements from Supabase about pricing since 3 Nov.",
+          "searches": [
+            "site:supabase.com pricing",
+            "Supabase Pro plan pricing November 2026",
+            "Supabase pricing change announcement November 2026"
+          ],
+          "sources": [
+            {
+              "id": 2,
+              "url": "https://supabase.com/docs/guides/storage/pricing",
+              "title": "Storage pricing",
+              "pageAge": "3 days ago"
+            },
+            {
+              "id": 3,
+              "url": "https://supabase.com/docs/guides/platform/manage-your-usage/compute",
+              "title": "Manage Compute usage",
+              "pageAge": "12 days ago"
+            },
+            {
+              "id": 8,
+              "url": "https://supabase.com/docs/guides/platform/manage-your-usage/monthly-active-users-sso",
+              "title": "Manage Monthly Active SSO Users usage",
+              "pageAge": "6 days ago"
+            },
+            {
+              "id": 9,
+              "url": "https://supabase.com/docs/guides/platform/compute-and-disk",
+              "title": "Compute and Disk",
+              "pageAge": "7 days ago"
+            },
+            {
+              "id": 10,
+              "url": "https://supabase.com/docs/guides/platform/manage-your-usage/egress",
+              "title": "Manage Egress usage",
+              "pageAge": "12 days ago"
+            },
+            {
+              "id": 12,
+              "url": "https://costbench.com/software/database-as-service/supabase/",
+              "title": "Supabase Pricing 2026: 4 Plans, Free–$599/mo",
+              "pageAge": "5 days ago"
+            }
+          ],
+          "evidence": [
+            {
+              "text": "Pro Plan, $25",
+              "citedTexts": [
+                "| Line Item | Units | Costs |\n| --- | --- | --- |\n| Pro Plan | 1 | $25 |\n| Compute Hours Small | 730 hours | $15 |\n| Monthly Active SSO Users | 37 SSO..."
+              ],
+              "sourceIds": [
+                8
+              ]
+            },
+            {
+              "text": "Micro, ~$10 monthly",
+              "citedTexts": [
+                "## Pricing#\n| Compute Size | Hourly Price USD | Monthly Price USD |\n| --- | --- | --- |\n| Nano^1 | $0 | $0 |\n| Micro | $0.01344 | \\~$10 |\n| Small | $0..."
+              ],
+              "sourceIds": [
+                3
+              ]
+            },
+            {
+              "text": "$10 in Compute Credits, which cover one project running on the Micro/Nano Compute size",
+              "citedTexts": [
+                "## Compute Credits#\n\nPaid plans include $10 in Compute Credits, which cover one project running on the Micro/Nano Compute size or portions of other Co..."
+              ],
+              "sourceIds": [
+                3
+              ]
+            },
+            {
+              "text": "8 GB included, then $0.125 per GB",
+              "citedTexts": [
+                "# Compute and Disk\n## Compute#\n| Compute Size | Hourly Price USD | Monthly Price USD | CPU | Memory | Max DB Size (Recommended)^1 |\n| --- | --- | --- ..."
+              ],
+              "sourceIds": [
+                9
+              ]
+            },
+            {
+              "text": "Pro: 250 GB / 250 GB",
+              "citedTexts": [
+                "| Plan | Egress Quota (Uncached / Cached) | Over-Usage per month (Uncached / Cached) |\n| --- | --- | --- |\n| Free | 5 GB / 5 GB | - |\n| Pro | 250 GB /..."
+              ],
+              "sourceIds": [
+                10
+              ]
+            },
+            {
+              "text": "Pro: 100 GB",
+              "citedTexts": [
+                "| Plan | Quota in GB | Over-Usage per GB | Quota in GB-Hrs | Over-Usage per GB-Hr |\n| --- | --- | --- | --- | --- |\n| Free | 1 | - | 744 | - |\n| Pro |..."
+              ],
+              "sourceIds": [
+                2
+              ]
+            },
+            {
+              "text": "prices checked Nov 5, 2026",
+              "citedTexts": [
+                "Prices checked Nov 5, 2026. "
+              ],
+              "sourceIds": [
+                12
+              ]
+            }
+          ],
+          "unverified": [
+            {
+              "value": "$0.125",
+              "sentence": "8 GB included, then $0.125 per GB",
+              "sourceIds": [
+                9
+              ]
+            }
+          ],
+          "meta": {
+            "intent": "recheck",
+            "model": "claude-opus-5-5",
+            "planMs": 1348,
+            "firstTokenMs": 31087,
+            "totalMs": 31088,
+            "searches": 3,
+            "sourcesSeen": 27,
+            "recalledTurns": 1,
+            "unverifiedNumbers": 1,
+            "costUsd": 0.0823
+          },
+          "background": {}
+        }
+      ]
+    },
+    {
+      "id": "last-tuesday",
+      "category": "ambiguous date + delta",
+      "pass": true,
+      "rules": [],
+      "majors": [],
+      "verdict": {
+        "grounded": 4,
+        "fresh": 5,
+        "honest": 4,
+        "helpful": 5,
+        "concise": 4,
+        "failures": [
+          {
+            "severity": "minor",
+            "issue": "'Supabase compute always on: Held' rests on a sentence about hourly billing for running projects, which does not show compute is always on."
+          },
+          {
+            "severity": "minor",
+            "issue": "The opening claims every figure from 3 Nov still matches, but the Supabase 'one Small project comes to $30 after the $10 credit' figure is not re-checked in the table."
+          },
+          {
+            "severity": "minor",
+            "issue": "Calling the Neon FAQ's 0.5 GB 'older wording' is an unsupported guess, since that page has no date."
+          },
+          {
+            "severity": "minor",
+            "issue": "The '500 MB per project' value is cut off in the cited excerpt, so the table row is only weakly evidenced."
+          }
+        ]
+      },
+      "setup": [
+        {
+          "user": "Which managed Postgres hosting is cheapest for a small app: Neon, Supabase, or AWS RDS?",
+          "answer": "Neon is usually the cheapest for a small app. Its free plan costs nothing, and its paid plan has no monthly minimum.\n\n| As of 3 Nov 2026 | Free | Cheapest paid |\n|---|---|---|\n| Neon | $0, with 1 GB of storage per project and 100 CU-hours of compute | Typical spend is about $15/month for a small database on Launch; no minimum |\n| Supabase | $0, with a 500 MB database; free projects pause after 1 week of inactivity | Pro is $25 plus compute, and one Small project comes to $30 after the $10 credit |\n| AWS RDS | New accounts get up to $200 in credits, and the Free plan lasts up to 6 months | Pay per instance-hour plus storage, so it depends on the instance. I didn't pull a specific price. |\n\nNeon also bills compute only while it's running. It scales to zero after 5 minutes idle. Supabase Pro compute is always on.\n\nRDS is a good fit if you're already on AWS. For a small app, the free-tier credits run out, and I'd expect it to cost more than Neon's idle-friendly pricing. The cost comparison with Supabase's Pro plan comes from Neon's own guide, so treat it as vendor-sourced.",
+          "searches": [
+            "site:neon.com pricing",
+            "site:supabase.com pricing",
+            "site:aws.amazon.com rds postgresql pricing"
+          ],
+          "sources": [
+            {
+              "id": 1,
+              "url": "https://neon.com/pricing",
+              "title": "Neon Pricing: Free Plan With 100 Projects, Typical Spend $15/Month",
+              "pageAge": "6 days ago"
+            },
+            {
+              "id": 3,
+              "url": "https://neon.com/docs/introduction/plans",
+              "title": "Neon plans - Neon Docs",
+              "pageAge": "5 days ago"
+            },
+            {
+              "id": 9,
+              "url": "https://neon.com/faqs/serverless-database-services-postgres-charge-per-second",
+              "title": "Which serverless database services charge per second instead of per month for Postgres? - Neon FAQs",
+              "pageAge": null
+            },
+            {
+              "id": 11,
+              "url": "https://supabase.com/pricing",
+              "title": "Pricing & Fees",
+              "pageAge": "403 days ago"
+            },
+            {
+              "id": 13,
+              "url": "https://supabase.com/docs/guides/platform/manage-your-usage/compute",
+              "title": "Manage Compute usage",
+              "pageAge": "12 days ago"
+            },
+            {
+              "id": 26,
+              "url": "https://aws.amazon.com/rds/free/",
+              "title": "Amazon RDS Free Tier",
+              "pageAge": "4 days ago"
+            }
+          ],
+          "evidence": [
+            {
+              "text": "$0, with 1 GB of storage per project and 100 CU-hours of compute",
+              "citedTexts": [
+                "The Free plan costs $0/month and includes 100 projects, 10 branches per project, 100 CU-hours of compute per project per month, autoscaling up to 2 CU..."
+              ],
+              "sourceIds": [
+                3
+              ]
+            },
+            {
+              "text": "Typical spend is about $15/month for a small database on Launch",
+              "citedTexts": [
+                "Paid plans are usage-based with no monthly minimum and no per-project fee; typical spend is about $15/month for a small database on Launch and $701/mo..."
+              ],
+              "sourceIds": [
+                1
+              ]
+            },
+            {
+              "text": "$0, with a 500 MB database",
+              "citedTexts": [
+                "# Predictable pricing, designed to scale\n## AI tools\n### Free\n\nStart for Free\n\n$0\n\n/ month\n\nGet started with:\n\n- Unlimited API requests\n- 50,000 month..."
+              ],
+              "sourceIds": [
+                11
+              ]
+            },
+            {
+              "text": "free projects pause after 1 week of inactivity",
+              "citedTexts": [
+                "Additional projects from $10/mo.See how pricing scales\n\n- 100,000 monthly active users then $0.00325 per MAU\n- 8 GB disk size per project then $0.125 ..."
+              ],
+              "sourceIds": [
+                11
+              ]
+            },
+            {
+              "text": "Pro is $25 plus compute, and one Small project comes to $30 after the $10 credit",
+              "citedTexts": [
+                "| Line Item | Hours | Costs |\n| --- | --- | --- |\n| Pro Plan | - | $25 |\n| Compute Hours Small Project 1 | 730 | $15 |\n| Subtotal |  | $40 |\n| Compute..."
+              ],
+              "sourceIds": [
+                13
+              ]
+            },
+            {
+              "text": "New accounts get up to $200 in credits",
+              "citedTexts": [
+                "You will receive up to $100 in AWS credits at sign-up and can earn up to an additional $100 in credits, totaling $200, to explore eligible AWS service..."
+              ],
+              "sourceIds": [
+                26
+              ]
+            },
+            {
+              "text": "the Free plan lasts up to 6 months",
+              "citedTexts": [
+                "With Free plan, you can explore Aurora and RDS for up to 6 months without any commitments or cost.\n\n"
+              ],
+              "sourceIds": [
+                26
+              ]
+            },
+            {
+              "text": "It scales to zero after 5 minutes idle",
+              "citedTexts": [
+                ": Yes, after 5 minutes idle on the Free plan and Launch plan (configurable on the Scale plan).\n\n"
+              ],
+              "sourceIds": [
+                9
+              ]
+            }
+          ],
+          "unverified": [
+            {
+              "value": "$30",
+              "sentence": "Pro is $25 plus compute, and one Small project comes to $30 after the $10 credit",
+              "sourceIds": [
+                13
+              ]
+            },
+            {
+              "value": "$10",
+              "sentence": "Pro is $25 plus compute, and one Small project comes to $30 after the $10 credit",
+              "sourceIds": [
+                13
+              ]
+            }
+          ],
+          "meta": {
+            "intent": "search",
+            "model": "claude-sonnet-5-5",
+            "planMs": 2057,
+            "firstTokenMs": 9102,
+            "totalMs": 9103,
+            "searches": 3,
+            "sourcesSeen": 30,
+            "recalledTurns": 0,
+            "unverifiedNumbers": 2,
+            "costUsd": 0.0376
+          },
+          "background": {}
+        }
+      ],
+      "turns": [
+        {
+          "user": "Last Tuesday I asked you about Postgres hosting. Has any pricing changed since then?",
+          "answer": "No price changes since our 3 Nov chat for any of the three. Every figure I gave then still matches the vendors' own pages. The one exception is Supabase's free-tier pause rule, which I couldn't confirm on a current page.\n\n| Item | Then (3 Nov) | Now (11 Nov 2026) | Status |\n|---|---|---|---|\n| Neon Free plan, Launch spend, minimum | $0, 1 GB, 100 CU-hours; about $15/mo; no minimum | $0 with no credit card: 100 projects, each with 100 CU-hours and 1 GB of storage; no monthly minimum… about $15/month for a small database on Launch | Held |\n| Neon scale-to-zero | 5 min | after 5 minutes idle on the Free plan and Launch plan | Held |\n| Supabase Free database | 500 MB | 500 MB per project | Held |\n| Supabase Pro base, credit | $25; $10 credit | Paid plans include $10 in Compute Credits; Pro still $25 | Held |\n| Supabase compute always on | Yes | charged for the exact number of hours that a project is running | Held |\n| Supabase free pause | 1 week | Only on the pricing page, which is 403 days old | Couldn't verify |\n| AWS RDS credits, free plan | Up to $200; 6 months | totaling $200; up to 6 months | Held |\n\nOne small catch: a Neon FAQ lists 0.5 GB of storage per project on Free. That's older wording. The pricing page and plan docs both say 1 GB. \"Last Tuesday\" here means 3 Nov, since we didn't talk on 10 Nov.",
+          "searches": [
+            "site:neon.com pricing",
+            "site:supabase.com pricing",
+            "site:aws.amazon.com RDS free tier credits"
+          ],
+          "sources": [
+            {
+              "id": 1,
+              "url": "https://neon.com/pricing",
+              "title": "Neon Pricing: Free Plan With 100 Projects, Typical Spend $15/Month",
+              "pageAge": "6 days ago"
+            },
+            {
+              "id": 9,
+              "url": "https://neon.com/faqs/serverless-database-services-postgres-charge-per-second",
+              "title": "Which serverless database services charge per second instead of per month for Postgres? - Neon FAQs",
+              "pageAge": null
+            },
+            {
+              "id": 13,
+              "url": "https://supabase.com/docs/guides/platform/manage-your-usage/compute",
+              "title": "Manage Compute usage",
+              "pageAge": "12 days ago"
+            },
+            {
+              "id": 18,
+              "url": "https://supabase.com/docs/guides/platform/billing-on-supabase",
+              "title": "About billing on Supabase",
+              "pageAge": "54 days ago"
+            },
+            {
+              "id": 21,
+              "url": "https://aws.amazon.com/rds/free/",
+              "title": "Amazon RDS Free Tier",
+              "pageAge": "4 days ago"
+            }
+          ],
+          "evidence": [
+            {
+              "text": "$0 with no credit card: 100 projects, each with 100 CU-hours and 1 GB of storage",
+              "citedTexts": [
+                "Neon's Free plan is $0 with no credit card: 100 projects, each with 100 CU-hours and 1 GB of storage. "
+              ],
+              "sourceIds": [
+                1
+              ]
+            },
+            {
+              "text": "no monthly minimum… about $15/month for a small database on Launch",
+              "citedTexts": [
+                "Paid plans are usage-based with no monthly minimum and no per-project fee; typical spend is about $15/month for a small database on Launch and $701/mo..."
+              ],
+              "sourceIds": [
+                1
+              ]
+            },
+            {
+              "text": "after 5 minutes idle on the Free plan and Launch plan",
+              "citedTexts": [
+                ": Yes, after 5 minutes idle on the Free plan and Launch plan (configurable on the Scale plan).\n\n"
+              ],
+              "sourceIds": [
+                9
+              ]
+            },
+            {
+              "text": "500 MB per project",
+              "citedTexts": [
+                "| Usage Item | Free | Pro/Team | Enterprise |\n| --- | --- | --- | --- |\n| Egress | 5 GB | 250 GB included, then $0.09 per GB | Custom |\n| Database Siz..."
+              ],
+              "sourceIds": [
+                18
+              ]
+            },
+            {
+              "text": "Paid plans include $10 in Compute Credits",
+              "citedTexts": [
+                "## Compute Credits#\n\nPaid plans include $10 in Compute Credits, which cover one project running on the Micro/Nano Compute size or portions of other Co..."
+              ],
+              "sourceIds": [
+                13
+              ]
+            },
+            {
+              "text": "$25",
+              "citedTexts": [
+                "| Line Item | Hours | Costs |\n| --- | --- | --- |\n| Pro Plan | - | $25 |\n| Compute Hours Small Project 1 | 730 | $15 |\n| Subtotal |  | $40 |\n| Compute..."
+              ],
+              "sourceIds": [
+                13
+              ]
+            },
+            {
+              "text": "charged for the exact number of hours that a project is running",
+              "citedTexts": [
+                "# Manage Compute usage\n## How charges are calculated#\nCompute is charged by the hour, meaning you are charged for the exact number of hours that a pro..."
+              ],
+              "sourceIds": [
+                13
+              ]
+            },
+            {
+              "text": "totaling $200",
+              "citedTexts": [
+                "You will receive up to $100 in AWS credits at sign-up and can earn up to an additional $100 in credits, totaling $200, to explore eligible AWS service..."
+              ],
+              "sourceIds": [
+                21
+              ]
+            },
+            {
+              "text": "up to 6 months",
+              "citedTexts": [
+                "With Free plan, you can explore Aurora and RDS for up to 6 months without any commitments or cost.\n\n"
+              ],
+              "sourceIds": [
+                21
+              ]
+            },
+            {
+              "text": "0.5 GB of storage per project",
+              "citedTexts": [
+                "The Free plan includes 100 CU-hours and 0.5 GB of storage per project.\n\n"
+              ],
+              "sourceIds": [
+                9
+              ]
+            }
+          ],
+          "unverified": [],
+          "meta": {
+            "intent": "recheck",
+            "model": "claude-opus-5-5",
+            "planMs": 1536,
+            "firstTokenMs": 20353,
+            "totalMs": 20358,
+            "searches": 3,
+            "sourcesSeen": 30,
+            "recalledTurns": 1,
+            "unverifiedNumbers": 0,
+            "costUsd": 0.0627
+          },
+          "background": {}
+        }
+      ]
+    },
+    {
+      "id": "correction",
+      "category": "mid-thread correction",
+      "pass": true,
+      "rules": [],
+      "majors": [],
+      "verdict": {
+        "grounded": 4,
+        "fresh": 5,
+        "honest": 4,
+        "helpful": 5,
+        "concise": 4,
+        "failures": [
+          {
+            "severity": "minor",
+            "issue": "In the first answer, the $17/$20 and '$200 billed up front' figures attributed to Anthropic's pricing page do not appear in the truncated excerpt, which shows only the Free tier."
+          },
+          {
+            "severity": "minor",
+            "issue": "The fast mode $8/$40 excerpt does not say which model it applies to, so attributing it to Opus 5.5 is only implied."
+          },
+          {
+            "severity": "minor",
+            "issue": "The extra bullets on cache, fast mode, US-only inference and Opus 5 go beyond the input/output price the user asked for."
+          }
+        ]
+      },
+      "setup": [],
+      "turns": [
+        {
+          "user": "How much is Claude Pro?",
+          "answer": "Claude Pro costs $20 a month in the US, or $17 a month if you pay annually.\n\n- Anthropic's pricing page lists $17 per month on an annual subscription ($200 billed up front), or $20 if billed monthly. That page copy is flagged as old, so I also checked a third-party tracker. It says those figures matched Anthropic's pricing page as of 10 November 2026.\n- Anthropic's help page says pricing is in local currency where supported, and varies by region and tax treatment. Your price may differ from the US one. Check claude.ai/upgrade to see what you'd pay.",
+          "searches": [
+            "site:anthropic.com Claude Pro pricing",
+            "Claude Pro price November 2026"
+          ],
+          "sources": [
+            {
+              "id": 2,
+              "url": "https://www.anthropic.com/pricing",
+              "title": "Plans & pricing",
+              "pageAge": "537 days ago"
+            },
+            {
+              "id": 3,
+              "url": "https://support.anthropic.com/en/articles/8325606-what-is-claude-pro",
+              "title": "What is the Pro plan?",
+              "pageAge": "28 days ago"
+            },
+            {
+              "id": 11,
+              "url": "https://www.ssdnodes.com/learn/claude-pro-price-and-limits",
+              "title": "Claude Pro pricing: what $20 a month gets you · SSD Nodes",
+              "pageAge": "0 days ago"
+            }
+          ],
+          "evidence": [
+            {
+              "text": "Anthropic's pricing page lists $17 per month on an annual subscription ($200 billed up front), or $20 if billed monthly.",
+              "citedTexts": [
+                "# Pricing\n\n### Free\n\nTry Claude\n\n$0\n\nFree for everyone\n\nTry Claude\n\n- **Limited usage** every 5 hours and every week\\*\n- Chat on web, desktop, and mob..."
+              ],
+              "sourceIds": [
+                2
+              ]
+            },
+            {
+              "text": "It says those figures matched Anthropic's pricing page as of 10 November 2026.",
+              "citedTexts": [
+                "Those are the figures on Anthropic's pricing page as of 10 November 2026, when this page was last checked.\n\n"
+              ],
+              "sourceIds": [
+                11
+              ]
+            },
+            {
+              "text": "pricing is in local currency where supported, and varies by region and tax treatment.",
+              "citedTexts": [
+                "The Pro plan is available for $20 per month (US), with pricing in your local currency where supported. Monthly pricing varies by region, and some regi..."
+              ],
+              "sourceIds": [
+                3
+              ]
+            }
+          ],
+          "unverified": [
+            {
+              "value": "$17",
+              "sentence": "Anthropic's pricing page lists $17 per month on an annual subscription ($200 billed up front), or $20 if billed monthly.",
+              "sourceIds": [
+                2
+              ]
+            },
+            {
+              "value": "$200",
+              "sentence": "Anthropic's pricing page lists $17 per month on an annual subscription ($200 billed up front), or $20 if billed monthly.",
+              "sourceIds": [
+                2
+              ]
+            },
+            {
+              "value": "$20",
+              "sentence": "Anthropic's pricing page lists $17 per month on an annual subscription ($200 billed up front), or $20 if billed monthly.",
+              "sourceIds": [
+                2
+              ]
+            }
+          ],
+          "meta": {
+            "intent": "search",
+            "model": "claude-sonnet-5-5",
+            "planMs": 1673,
+            "firstTokenMs": 6282,
+            "totalMs": 6283,
+            "searches": 2,
+            "sourcesSeen": 20,
+            "recalledTurns": 0,
+            "unverifiedNumbers": 3,
+            "costUsd": 0.0239
+          },
+          "background": {}
+        },
+        {
+          "user": "No, I meant the API price for Claude Opus.",
+          "answer": "The newest Opus is Claude Opus 5.5, and its API price is $4 per million input tokens and $20 per million output tokens. Anthropic's Opus page gives those figures and says they are 20% below Opus 5. That page is about 6 days old.\n\n- **Cache reads:** $0.20 per million tokens.\n- **Fast mode:** $8 per million input tokens and $40 per million output tokens.\n- **US-only inference:** 1.1x pricing for input and output tokens.\n- **Opus 5 (the previous version):** $5 per million input tokens and $25 per million output tokens.",
+          "searches": [
+            "site:anthropic.com Claude Opus API pricing per million tokens"
+          ],
+          "sources": [
+            {
+              "id": 1,
+              "url": "https://www.anthropic.com/claude/opus",
+              "title": "Claude Opus \\ Anthropic",
+              "pageAge": "6 days ago"
+            },
+            {
+              "id": 6,
+              "url": "https://www.anthropic.com/news/claude-opus-5",
+              "title": "Introducing Claude Opus 5 \\ Anthropic",
+              "pageAge": "27 days ago"
+            }
+          ],
+          "evidence": [
+            {
+              "text": "Anthropic's Opus page gives those figures and says they are 20% below Opus 5.",
+              "citedTexts": [
+                "Opus 5.5 costs $4 per million input tokens and $20 per million output tokens, 20% below Opus 5.\n\n"
+              ],
+              "sourceIds": [
+                1
+              ]
+            },
+            {
+              "text": "$0.20 per million tokens.",
+              "citedTexts": [
+                "Cache reads, which are a large share of the cost of long-running agentic work, also now cost 60% less than Opus 5, at $0.20 per million tokens.  "
+              ],
+              "sourceIds": [
+                1
+              ]
+            },
+            {
+              "text": "$8 per million input tokens and $40 per million output tokens.",
+              "citedTexts": [
+                "It costs $8 per million input tokens and $40 per million output tokens.\n\n"
+              ],
+              "sourceIds": [
+                1
+              ]
+            },
+            {
+              "text": "1.1x pricing for input and output tokens.",
+              "citedTexts": [
+                "For workloads that need to run in the US, US-only inference is available at 1.1x pricing for input and output tokens.\n\n"
+              ],
+              "sourceIds": [
+                1
+              ]
+            },
+            {
+              "text": "$5 per million input tokens and $25 per million output tokens.",
+              "citedTexts": [
+                "## Getting started\nClaude Opus 5 is available today on all platforms, priced at $5 per million input tokens and $25 per million output tokens (the sam..."
+              ],
+              "sourceIds": [
+                6
+              ]
+            }
+          ],
+          "unverified": [],
+          "meta": {
+            "intent": "search",
+            "model": "claude-sonnet-5-5",
+            "planMs": 1678,
+            "firstTokenMs": 5496,
+            "totalMs": 5497,
+            "searches": 1,
+            "sourcesSeen": 10,
+            "recalledTurns": 0,
+            "unverifiedNumbers": 0,
+            "costUsd": 0.0137
+          },
+          "background": {}
+        }
+      ]
+    },
+    {
+      "id": "stale-premise",
+      "category": "stale premise",
+      "pass": true,
+      "rules": [],
+      "majors": [],
+      "verdict": {
+        "grounded": 4,
+        "fresh": 4,
+        "honest": 5,
+        "helpful": 4,
+        "concise": 4,
+        "failures": [
+          {
+            "severity": "minor",
+            "issue": "It calls GPT-6 Astra the flagship and 'most intelligent' based on a 68-day-old launch page, even though the newer GPT-6.1 Terra likely supersedes that claim, which muddies which model is actually most capable."
+          },
+          {
+            "severity": "minor",
+            "issue": "The final paragraph is confusing: it introduces the third-party claim that ChatGPT answers with GPT-6 without saying how that relates to Terra's rollout or giving Astra's launch date."
+          },
+          {
+            "severity": "minor",
+            "issue": "The availability list omits Business users, although the cited launch-date excerpt includes them."
+          }
+        ]
+      },
+      "setup": [],
+      "turns": [
+        {
+          "user": "Is GPT-4 still the newest OpenAI model?",
+          "answer": "No, GPT-4 is several generations behind. OpenAI's newest model is GPT-6 Cyber. OpenAI introduced it on 5 November 2026 as a cybersecurity model for finding vulnerabilities and developing fixes. It's restricted, though. Organizations need approval through OpenAI's Daybreak program before they can call it.\n\nThe newest model most people can use is GPT-6.1 Terra. It's available to all Plus, Pro, Enterprise, and Edu users in ChatGPT Work and Codex. It launched on 26 October 2026. Developers can also reach it through the API.\n\nFor the flagship, OpenAI describes GPT-6 Astra as its most intelligent and aligned model. Since 7 October, ChatGPT answers with GPT-6. That claim comes from a third-party roundup, not from OpenAI.",
+          "searches": [
+            "site:openai.com newest OpenAI model November 2026",
+            "OpenAI latest model release November 2026"
+          ],
+          "sources": [
+            {
+              "id": 1,
+              "url": "https://openai.com/index/introducing-gpt-6-cyber/",
+              "title": "GPT‑6 Cyber: Advancing the frontier of aligned cybersecurity agents",
+              "pageAge": "5 days ago"
+            },
+            {
+              "id": 2,
+              "url": "https://openai.com/index/gpt-6-astra/",
+              "title": "GPT-6 Astra: A new generation of intelligence",
+              "pageAge": "68 days ago"
+            },
+            {
+              "id": 4,
+              "url": "https://openai.com/index/introducing-gpt-6-1-terra/",
+              "title": "Introducing GPT-6.1 Terra",
+              "pageAge": "19 days ago"
+            },
+            {
+              "id": 17,
+              "url": "https://csuite.so/blog/ai-models-roundup-november-2026",
+              "title": "AI models roundup, November 2026 - CSuite",
+              "pageAge": "4 days ago"
+            },
+            {
+              "id": 20,
+              "url": "https://felloai.com/best-ai-models/",
+              "title": "Best AI Models in November 2026: Updated Rankings and Comparisons",
+              "pageAge": "95 days ago"
+            }
+          ],
+          "evidence": [
+            {
+              "text": "OpenAI introduced it on 5 November 2026 as a cybersecurity model for finding vulnerabilities and developing fixes.",
+              "citedTexts": [
+                "November 5, 2026ProductSecuritySafety. ",
+                "Introducing GPT‑6 Cyber, OpenAI’s cybersecurity model for finding exploitable vulnerabilities and developing fixes, trained to stay within authorized ..."
+              ],
+              "sourceIds": [
+                1
+              ]
+            },
+            {
+              "text": "Organizations need approval through OpenAI's Daybreak program before they can call it.",
+              "citedTexts": [
+                "An organization needs approval through OpenAI’s Daybreak program before it can call it.\n\n"
+              ],
+              "sourceIds": [
+                17
+              ]
+            },
+            {
+              "text": "It's available to all Plus, Pro, Enterprise, and Edu users in ChatGPT Work and Codex.",
+              "citedTexts": [
+                "Starting today, GPT-6.1 Terra is available to all Plus, Pro, Enterprise, and Edu users in ChatGPT Work and Codex. "
+              ],
+              "sourceIds": [
+                4
+              ]
+            },
+            {
+              "text": "It launched on 26 October 2026.",
+              "citedTexts": [
+                "OpenAI released GPT-6.1 Terra on October 26, 2026, in ChatGPT Work and Codex for Plus, Pro, Business, Enterprise and Edu, and in the API as gpt-6.1-te..."
+              ],
+              "sourceIds": [
+                20
+              ]
+            },
+            {
+              "text": "OpenAI describes GPT-6 Astra as its most intelligent and aligned model.",
+              "citedTexts": [
+                "Introducing GPT-6 Astra, our most intelligent and aligned model yet, with state-of-the-art capabilities across computer use, coding, cybersecurity, an..."
+              ],
+              "sourceIds": [
+                2
+              ]
+            },
+            {
+              "text": "Since 7 October, ChatGPT answers with GPT-6.",
+              "citedTexts": [
+                "OpenAI launched GPT-6 Astra on September 3, 2026 and GPT-6 Sol and GPT-6 Luna on September 22, and since October 7 GPT-6 is what ChatGPT answers with:..."
+              ],
+              "sourceIds": [
+                20
+              ]
+            }
+          ],
+          "unverified": [],
+          "meta": {
+            "intent": "search",
+            "model": "claude-sonnet-5-5",
+            "planMs": 2046,
+            "firstTokenMs": 7475,
+            "totalMs": 7476,
+            "searches": 2,
+            "sourcesSeen": 20,
+            "recalledTurns": 0,
+            "unverifiedNumbers": 0,
+            "costUsd": 0.0253
+          },
+          "background": {}
+        }
+      ]
+    },
+    {
+      "id": "vague",
+      "category": "vague request",
+      "pass": true,
+      "rules": [],
+      "majors": [],
+      "verdict": {
+        "grounded": 5,
+        "fresh": 5,
+        "honest": 5,
+        "helpful": 5,
+        "concise": 5,
+        "failures": []
+      },
+      "setup": [],
+      "turns": [
+        {
+          "user": "is it worth upgrading?",
+          "answer": "Upgrading what? Tell me the product or service you're considering and what you're on now, and I'll check current pricing and plans to tell you whether it's worth it.",
+          "searches": [],
+          "sources": [],
+          "evidence": [],
+          "unverified": [],
+          "meta": {
+            "intent": "clarify",
+            "model": "claude-haiku-5-5",
+            "planMs": 1214,
+            "firstTokenMs": 1916,
+            "totalMs": 2168,
+            "searches": 0,
+            "sourcesSeen": 0,
+            "recalledTurns": 0,
+            "unverifiedNumbers": 0,
+            "costUsd": 0.0002
+          },
+          "background": {}
+        }
+      ]
+    }
+  ]
+}
