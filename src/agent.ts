@@ -2,10 +2,12 @@
 //   [0] resolve dates + recall memory (code)  ->  [1] plan (Haiku)  ->  [3] search + write, streamed (Opus + web search)
 //   ->  [4] number guard (code)  ->  save turn  ->  [5] extract claims (Haiku, after the reply is done)
 import Anthropic from "@anthropic-ai/sdk";
-import { answer, type AgentEvent } from "./answer.ts";
+import { answer, type AgentEvent, type AnswerResult } from "./answer.ts";
 import { extractClaims } from "./claims.ts";
 import { config } from "./config.ts";
 import { addDays, localDate, longDate, prettyDay, resolveDates, type DateMention } from "./dates.ts";
+import { fastPlan, shouldSpeculate } from "./fastpath.ts";
+import { Gate } from "./gate.ts";
 import { checkNumbers } from "./guard.ts";
 import { Memory, type Turn } from "./memory.ts";
 import { fallbackPlan, plan as makePlan, type Plan } from "./planner.ts";
@@ -20,6 +22,30 @@ const PRICE: Record<string, { in: number; out: number }> = {
   "claude-haiku-5-5": { in: 0.1, out: 0.5 },
 };
 const SEARCH_USD = 0.01;
+
+type WriteOptions = {
+  model: string;
+  search: boolean;
+  budget: number;
+  effort: "low" | "medium";
+  memory: string;
+  planNote: string;
+  cancel?: AbortSignal;
+  emit: (e: AgentEvent) => void;
+};
+
+/** A search writer started before the planner answered; kept or discarded once it does. */
+type Speculation = {
+  gate: Gate;
+  budget: number;
+  accepted: boolean; // the planner agreed; its events are now the user's
+  failed: boolean; // it errored before the planner answered; never replayed
+  promise: Promise<AnswerResult | null>;
+  cancel: () => void; // drop its events and abort it
+};
+
+/** What the speculative writer assumes until the planner answers: a fresh search, nothing from memory. */
+const SPECULATIVE_PLAN: Plan = { intent: "search", refers_to_past_conversation: false, topic_keywords: [], entities: [], search_queries: [], clarify_question: "" };
 
 export class Agent {
   constructor(
@@ -45,30 +71,103 @@ export class Agent {
     const historyIds = new Set(history.map((t) => t.id));
     let recalled = recallByDate(this.memory, mentions).filter((t) => !historyIds.has(t.id));
 
-    // [1] Plan.
-    const tPlan = Date.now();
-    let plan: Plan;
-    try {
-      plan = await makePlan(this.client, {
-        message: req.message,
-        today,
-        dates: mentions.map(describeMention).join("; "),
-        history: history.map((t) => `User: ${t.userText}\nAssistant: ${clip(t.answerText, 400)}`).join("\n\n"),
-        memory: recalled.map((t) => `${prettyDay(t.localDate)}: "${clip(t.userText, 160)}"`).join("; "),
-      });
-    } catch (err) {
-      if (isAuthError(err) || isBillingError(err)) throw err; // no point answering if the account can't
-      console.warn("planner failed, defaulting to search:", (err as Error).message);
-      plan = fallbackPlan(req.message);
-    }
-    const planMs = Date.now() - tPlan;
+    const historyMessages: Anthropic.MessageParam[] = [
+      ...history.flatMap((t): Anthropic.MessageParam[] => [
+        { role: "user", content: t.userText },
+        // Earlier answers carry their sources, so "where did you get that?" is answerable without guessing.
+        { role: "assistant", content: (t.answerText || "(no answer)") + sourcesNote(t) },
+      ]),
+      { role: "user", content: req.message },
+    ];
+    // Each writer gets its own deadline, counted from when that writer starts, so a slow planner never eats the
+    // writer's time. `cancel` lets a speculative writer be stopped early.
+    const write = (o: WriteOptions) => {
+      const c = new AbortController();
+      o.cancel?.addEventListener("abort", () => c.abort(), { once: true });
+      const timer = setTimeout(() => c.abort(), config.turnDeadlineMs);
+      return answer(this.client, {
+        model: o.model,
+        history: historyMessages,
+        context: contextBlock({ today, timezone: req.tz, memory: o.memory, planNote: o.planNote, maxSearches: o.budget, searchAllowed: o.search }),
+        search: o.search,
+        maxSearches: o.budget,
+        effort: o.effort,
+        timezone: req.tz,
+        signal: c.signal,
+        emit: o.emit,
+      }).finally(() => clearTimeout(timer));
+    };
 
-    // Topic recall when the user points at an earlier chat without a date we could match ("the Postgres question").
-    if (plan.refers_to_past_conversation && plan.topic_keywords.length) {
-      const byTopic = this.memory.searchTurns(plan.topic_keywords).filter((t) => !historyIds.has(t.id));
-      const seen = new Set(recalled.map((t) => t.id));
-      // Dated hits come first; topic hits fill in when the date matched nothing or matched other chats.
-      recalled = [...recalled, ...byTopic.filter((t) => !seen.has(t.id))].slice(0, 6);
+    // [1] Plan. Obvious small talk skips the planner (src/fastpath.ts). A fresh research question can start the search
+    // writer at the same time as the planner; its output is held back until the planner agrees (src/gate.ts).
+    const fast = fastPlan(req.message, history.at(-1));
+    let spec: Speculation | null = null;
+    if (!fast && config.speculativeWriter && shouldSpeculate(req.message, mentions)) {
+      const gate = new Gate(send);
+      const sc = new AbortController();
+      const s: Speculation = {
+        gate,
+        budget: config.maxSearchesPerTurn,
+        accepted: false,
+        failed: false,
+        promise: Promise.resolve(null),
+        cancel: () => {
+          gate.discard();
+          sc.abort();
+        },
+      };
+      s.promise = write({
+        model: config.models.search,
+        search: true,
+        budget: s.budget,
+        effort: "low",
+        memory: this.memoryText(recalled, SPECULATIVE_PLAN, mentions, req.threadId),
+        planNote: "",
+        cancel: sc.signal,
+        emit: gate.emit,
+      }).catch((err) => {
+        if (s.accepted) throw err; // once kept, its errors are the turn's errors
+        // It died before being kept: drop everything it streamed so it can never be replayed, and let the
+        // normal path answer.
+        s.failed = true;
+        gate.discard();
+        return null;
+      });
+      spec = s;
+    }
+
+    let plan: Plan;
+    let planMs = 0;
+    try {
+      const tPlan = Date.now();
+      if (fast) plan = fast;
+      else {
+        try {
+          plan = await makePlan(this.client, {
+            message: req.message,
+            today,
+            dates: mentions.map(describeMention).join("; "),
+            history: history.map((t) => `User: ${t.userText}\nAssistant: ${clip(t.answerText, 400)}`).join("\n\n"),
+            memory: recalled.map((t) => `${prettyDay(t.localDate)}: "${clip(t.userText, 160)}"`).join("; "),
+          });
+        } catch (err) {
+          if (isAuthError(err) || isBillingError(err)) throw err; // no point answering if the account can't
+          console.warn("planner failed, defaulting to search:", (err as Error).message);
+          plan = fallbackPlan(req.message);
+        }
+      }
+      planMs = Date.now() - tPlan;
+
+      // Topic recall when the user points at an earlier chat without a date we could match ("the Postgres question").
+      if (plan.refers_to_past_conversation && plan.topic_keywords.length) {
+        const byTopic = this.memory.searchTurns(plan.topic_keywords).filter((t) => !historyIds.has(t.id));
+        const seen = new Set(recalled.map((t) => t.id));
+        // Dated hits come first; topic hits fill in when the date matched nothing or matched other chats.
+        recalled = [...recalled, ...byTopic.filter((t) => !seen.has(t.id))].slice(0, 6);
+      }
+    } catch (err) {
+      spec?.cancel(); // never leave a speculative writer running (and billing) behind a failed turn
+      throw err;
     }
 
     const search = plan.intent === "search" || plan.intent === "recheck";
@@ -77,40 +176,36 @@ export class Agent {
     // The search budget scales with the number of things to check: eight products got two of them skipped
     // under a flat cap of 6 (DECISIONS.md #8). Capped so a turn stays fast and its cost bounded.
     const budget = Math.min(config.maxSearchesCap, Math.max(config.maxSearchesPerTurn, plan.entities.length + 2));
+    // Keep the speculative writer only if the planner chose exactly what it was already doing: a plain search turn
+    // (not a re-check, not about an earlier chat) with the default search budget. Anything else is discarded unseen.
+    const keep = spec !== null && !spec.failed && plan.intent === "search" && !plan.refers_to_past_conversation && budget === spec.budget;
+    let speculative: "off" | "kept" | "discarded" | "failed" = !spec ? "off" : spec.failed ? "failed" : keep ? "kept" : "discarded";
+
     if (search) {
       const what = plan.entities.length ? plan.entities.slice(0, 6).join(", ") : "the web";
       send({ type: "status", text: plan.intent === "recheck" ? `Re-checking ${what}…` : `Searching ${what}…` });
     }
 
     // [3] Search + write, streamed.
-    const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), config.turnDeadlineMs);
-    const memoryText = this.memoryText(recalled, plan, mentions, req.threadId);
-    const result = await answer(this.client, {
-      model,
-      history: [
-        ...history.flatMap((t): Anthropic.MessageParam[] => [
-          { role: "user", content: t.userText },
-          // Earlier answers carry their sources, so "where did you get that?" is answerable without guessing.
-          { role: "assistant", content: (t.answerText || "(no answer)") + sourcesNote(t) },
-        ]),
-        { role: "user", content: req.message },
-      ],
-      context: contextBlock({
-        today,
-        timezone: req.tz,
-        memory: memoryText,
+    let result: AnswerResult | null = null;
+    if (spec && keep) {
+      spec.accepted = true;
+      spec.gate.release(); // replay what it already did (in order, after the status line), then stream live
+      result = await spec.promise;
+    } else {
+      spec?.cancel();
+    }
+    if (!result) {
+      result = await write({
+        model,
+        search,
+        budget,
+        effort,
+        memory: this.memoryText(recalled, plan, mentions, req.threadId),
         planNote: planNote(plan) + dateWindowNote(mentions, localDate(now, req.tz)),
-        maxSearches: budget,
-        searchAllowed: search,
-      }),
-      search,
-      maxSearches: budget,
-      effort,
-      timezone: req.tz,
-      signal: controller.signal,
-      emit: send,
-    }).finally(() => clearTimeout(timer));
+        emit: send,
+      });
+    }
 
     let text = result.text;
     if (result.aborted) {
@@ -130,8 +225,10 @@ export class Agent {
     send({ type: "evidence", spans: result.spans });
     if (guard.flagged.length) send({ type: "guard", unverified: guard.flagged });
 
+    // A discarded speculative call is billed for whatever it produced before the abort; that isn't reported back
+    // to us, so it isn't in this estimate. One more reason speculation stays off until it's measured.
     const cost =
-      cost$(config.fastModel, 600, 150) +
+      (fast ? 0 : cost$(config.fastModel, 600, 150)) +
       cost$(model, result.usage.input - result.usage.cacheRead * 0.9, result.usage.output) +
       result.usage.searches * SEARCH_USD;
     send({
@@ -139,6 +236,8 @@ export class Agent {
       meta: {
         intent: plan.intent,
         model,
+        fastPath: Boolean(fast),
+        speculative,
         planMs,
         firstTokenMs,
         totalMs: Date.now() - t0,

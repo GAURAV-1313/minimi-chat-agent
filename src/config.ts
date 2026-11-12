@@ -28,6 +28,9 @@ export const config = {
   // Hard caps that keep a turn fast and its cost bounded.
   maxSearchesPerTurn: Number(env("MAX_SEARCHES", "6")),
   maxSearchesCap: Number(env("MAX_SEARCHES_CAP", "10")),
+  // Start the search writer while the planner runs (src/fastpath.ts). Off by default: the speculative writer
+  // doesn't see the planner's notes, and its effect on answer quality hasn't been measured yet.
+  speculativeWriter: env("SPECULATIVE_WRITER", "0") === "1",
   turnDeadlineMs: Number(env("TURN_DEADLINE_MS", "45000")),
 };
 

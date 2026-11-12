@@ -36,6 +36,13 @@ test("a bare month name or 'last month' is the whole month", () => {
   // A month that hasn't happened yet this year means last year's.
   assert.deepEqual(one("what did we discuss in December?").range, { from: "2025-12-01", to: "2025-12-31" });
 });
+test("a product named after a weekday is not a date", () => {
+  assert.equal(resolveDates("Cheapest plan for Notion, Monday.com and Trello?", clock).length, 0);
+  assert.equal(resolveDates("Is monday.com cheaper than Asana?", clock).length, 0);
+  // the real weekday still works, including at the end of a sentence
+  assert.equal(one("What did we shortlist on Monday.").date, "2026-11-09");
+  assert.equal(one("What did we discuss on Monday.Can you remind me?").date, "2026-11-09");
+});
 test("relative days", () => {
   assert.equal(one("What did I ask you two days ago?").date, "2026-11-09");
 });

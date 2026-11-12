@@ -13,7 +13,8 @@ export type GuardResult = { flagged: Unverified[]; verified: number; unverifiabl
 
 // Money ($15, €1,200, ₹999, $15.50, $1.5M), "15 USD", and percentages (12%, 12.5 %).
 const NUMBER_RE = /(?:[$€£₹¥]\s?\d[\d,]*(?:\.\d+)?(?:\s?[kKmMbB]\b)?)|(?:\b\d[\d,]*(?:\.\d+)?\s?(?:%|percent\b|USD\b|EUR\b|GBP\b|INR\b))/g;
-const TRUNCATED_RE = /(\.\.\.|…)\s*$/;
+// Cut off at either end: "…$90 per seat for Profe..." or "...$10 per seat". Either way, part of the source is missing.
+const TRUNCATED_RE = /(?:^\s*(?:\.\.\.|…))|(?:(?:\.\.\.|…)\s*$)/;
 
 /** Canonical digits for a match: "$1,200.00" -> "1200", "12.5 %" -> "12.5". */
 export function canon(v: string): string {

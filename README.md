@@ -45,3 +45,4 @@ npm run eval        # 28 scenarios end to end: real models + real search, graded
 - **Reports:**
   - `npx tsx eval/report.ts <label>` combines repeat runs into per-scenario pass rates.
   - `npx tsx eval/replay-guard.ts` re-runs the number guard over every stored transcript, with no API calls.
+  - `npx tsx eval/guard-recall.ts` measures how many wrong numbers the guard catches, by corrupting stored answers, with no API calls.

@@ -16,7 +16,7 @@ The nine decisions that shape this agent, each with the problem behind it, what 
 - **Keys:** one, `ANTHROPIC_API_KEY`.
 
 **Why.**
-- **Everything that matters is in about 1,200 readable lines:** routing, recall, re-checks and the number guard.
+- **Everything that matters is in about 1,400 readable lines:** routing, recall, re-checks and the number guard.
 - **`node:sqlite` needs no native compile,** so `npm install` can't fail on a judge's machine. I verified this by installing from a clean copy.
 - **The search tool runs in direct mode** (`allowed_callers: ["direct"]`) rather than the default mode, which routes every search through code execution first. Direct mode lets the UI show each query the moment it starts.
 
@@ -43,10 +43,23 @@ The nine decisions that shape this agent, each with the problem behind it, what 
 | Haiku 5.5 everywhere | 6/10 | 5.3 s | failed all 3 re-checks; the only one that truly streams (#3) |
 | **Routed** (Haiku chat / Sonnet search / Opus re-check) | **7–8/10** | **6.6–6.9 s** | Opus only where it pays off |
 
+**Cutting the planner's ~2 s** (`src/fastpath.ts`, `src/gate.ts`; tested with a fake Claude client, no API calls):
+- **A small-talk fast path is on.** When the *whole* message is greetings, thanks or "what can you do?", the planner is skipped. The pattern is deliberately narrow: "hey, what does Notion cost?" still goes to the planner.
+- **A speculative writer is built but off** (`SPECULATIVE_WRITER=1` turns it on). For a fresh research question (no dates, no reference to an earlier chat), the Sonnet search writer starts *alongside* the planner, and its events are held back.
+  - **Kept:** if the planner returns a plain search with the default budget, the held events are released in order. That saves the planner's time on the most common turn.
+  - **Discarded:** anything else (a re-check, a clarification, a big multi-product search) aborts it unseen, and the normal writer runs.
+  - **Why it's off:** it writes without the planner's notes, and a discarded call still costs tokens. Both need a paid eval to judge, and that hasn't run.
+  - **The independent review found two real bugs in the first version, both reproduced, fixed and now covered by tests:**
+    - A speculation that *failed* before the planner answered was still replayed to the user, then answered again.
+    - The fallback writer after it had no deadline.
+
+    Also fixed from the review: each writer's deadline now starts when that writer starts, so a slow planner no longer eats it. And "ok" right after Pip asked a question goes to the planner instead of being treated as small talk.
+
 **Rejected.**
 - **Opus everywhere:** no better, and 50% slower.
 - **Haiku everywhere:** it marked claims "Held" with no evidence.
 - **A judge or best-of-N at runtime:** it costs time, and judges miss wrong numbers (#7).
+- **A keyword router instead of the planner:** fine for "hey", too brittle for "is it still correct?". Keywords only take the obvious cases.
 
 ---
 
@@ -79,6 +92,7 @@ Only **Haiku with thinking off** streamed token by token: first text at 1.0 s.
   - A bare weekday or date that would fall in the future means the past one, unless the user says "next".
   - "In August" and "last month" mean the whole month.
   - "This week" means the last 7 days.
+  - A weekday inside a domain name is a product, not a date: "Monday.com" isn't 9 Nov. A latency test caught this. The eight-product pricing scenario had been receiving a meaningless "Monday = 9 Nov" date window.
   - **"Last Tuesday" is ambiguous:** said on a Wednesday, it means yesterday to some people and 8 days ago to others. We try yesterday first, fall back to the week before, and the answer says which day it matched.
 - **The resolved dates also bound the answer.** The writer gets an explicit window ("this week" = 5–11 Nov 2026), so a 13-day-old story can't be presented as this week's news. Before this, dates only drove memory lookup, and old news slipped through.
 
@@ -136,7 +150,16 @@ Replayed offline over all 545 stored turns (`eval/replay-guard.ts`, no API calls
 | v1 | 543 | 36% |
 | **v2.1** | **8** | **1.3%**, and all 8 were fair on hand review |
 
-**Known limit.** About 31% of numbers sit behind cut-off excerpts and can't be checked at all, and recall (how many wrong numbers the guard misses) is unmeasured.
+**Recall** (`eval/guard-recall.ts`, offline). Every price and percentage in the 2,550 stored cited sentences was corrupted one at a time, and the real guard was run on the result.
+
+An independent review pointed out that most of this follows from the guard's own rules, so the method is reported that way:
+- **By design:**
+  - A made-up price ($90 → $113) is caught *exactly* when every excerpt behind the sentence is complete (508/508 caught; 0/1,121 when an excerpt is cut off).
+  - A wrong-row price (a real price from the same page, $90 → $150) is *never* caught (0/929), because it is in the excerpt.
+- **The measured fact:** only **508 of 1,630 prices (31.2%)** sit behind complete excerpts. That is the guard's expected recall on made-up prices in answers like ours.
+- **Scope:** money and percentages only. A wrong "10 GB" or "v26" isn't checked at all.
+
+So the guard is a precise, narrow net: every warning it shows was fair on hand review, but it misses about two thirds of made-up prices and every wrong-row error. The next step is label-aware matching: compare the number next to the same plan or tier name in the excerpt. Measuring it properly needs real wrong numbers flagged by a judge, not synthetic ones.
 
 ---
 

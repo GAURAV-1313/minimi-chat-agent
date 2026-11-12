@@ -54,6 +54,9 @@ export function resolveDates(text: string, clock: Clock): DateMention[] {
   const today = localDate(clock.now, clock.tz);
   const out: DateMention[] = [];
   for (const r of chrono.en.GB.parse(text, ref)) {
+    // "Monday.com" is a product, not a weekday. Found by a test: it put "Monday = 9 Nov" into a pricing turn.
+    // Only real domain endings, lowercase, so "Monday.Can you remind me?" (no space after the full stop) stays a date.
+    if (/^\.(?:com|io|co|app|ai|net|org|dev|so|xyz|in)\b/.test(text.slice(r.index + r.text.length))) continue;
     let start = r.start.date();
     const wantsFuture = FUTURE_WORDS.test(r.text) || FUTURE_WORDS.test(text.slice(Math.max(0, r.index - 12), r.index));
     if (!wantsFuture && localDate(start, clock.tz) > today) {

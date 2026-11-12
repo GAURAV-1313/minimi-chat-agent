@@ -5,7 +5,7 @@ A chat agent with one tool, web search, plus a **dated memory of every answer it
 ## How a turn works
 
 1. **Prep (code, ~0 ms).** chrono-node resolves "Monday", "3 November", "last Tuesday", "in August" or "this week" into calendar days in the browser's timezone. SQLite returns the turns from those days (FTS5 handles "the Postgres question" when no date is given), plus each turn's dated claims and cited evidence.
-2. **Plan (Haiku 5.5, ~2 s).** Structured output gives the turn type (`smalltalk`, `memory_only`, `clarify`, `search` or `recheck`), the entities, and neutral queries, with `site:vendor.com` for prices and launches.
+2. **Plan (Haiku 5.5, ~2 s).** Obvious small talk ("hey!", "thanks") skips this step. Otherwise, structured output gives the turn type (`smalltalk`, `memory_only`, `clarify`, `search` or `recheck`), the entities, and neutral queries, with `site:vendor.com` for prices and launches.
 3. **Write (one call, model picked by turn type).**
    - Haiku, thinking off, for chat; it truly streams.
    - Sonnet 5.5 with web search for research.
@@ -24,7 +24,7 @@ The starting point was our own data: 265 of our past research sub-agents and an 
 - **The agent can see its own record.** A skeptical simulated user once got it to deny searches it had made and call its correct quotes "made up", because earlier turns reached it as plain text. With the cited URLs and excerpts attached, that persona went from 0/2 to 2/3, and "where did you get that?" from 1/3 to 3/3.
 - **One planner and one writer, no sub-agents.** Our research sub-agents took a median of 8.6 minutes. Parallel searches inside one call give the same breadth in seconds.
 - **The model is chosen per turn type, by measurement.** On the first 10 scenarios, Opus and Sonnet tied on quality, with Sonnet 35% faster. Haiku failed every re-check. So Opus runs only where re-checks need it.
-- **Small and readable.** `node:http` with SSE, `node:sqlite` (built into Node, so no native build), a plain JS page, one API key, about 1,200 lines of TypeScript.
+- **Small and readable.** `node:http` with SSE, `node:sqlite` (built into Node, so no native build), a plain JS page, one API key, about 1,400 lines of TypeScript.
 
 ## How we tested
 
@@ -45,7 +45,7 @@ The starting point was our own data: 265 of our past research sub-agents and an 
 
 ## What I got wrong along the way
 
-- **My guard was mostly noise.** The API cuts `cited_text` at about 150 characters, and 55% of excerpts were truncated. Flagging every number it couldn't see warned on 36% of turns. Now it flags only numbers missing from complete excerpts: 8 flags across 545 replayed turns (1.3%), each one checked by hand. Recall is unmeasured: 31% of numbers can't be checked at all.
+- **My guard was mostly noise.** The API cuts `cited_text` at about 150 characters, and 55% of excerpts were truncated. Flagging every number it couldn't see warned on 36% of turns. Now it flags only numbers missing from complete excerpts: 8 flags across 545 replayed turns (1.3%), each one checked by hand. The honest price is recall: only 31.2% of prices sit behind complete excerpts, so it can catch at most about a third of made-up prices, and by design never a "right page, wrong row" error.
 - **I predicted three failures before iteration 1, and all three passed.** What actually failed was the honesty-under-pressure case I hadn't thought of.
 - **A 94% partial run didn't replicate.** The final runs score 85% on the same scenarios.
 - **My cost estimates ran at least 2× high against the console,** and at first I didn't track the judge at all. Spend is now tracked per run and capped with `--budget`.
@@ -64,13 +64,13 @@ The starting point was our own data: 265 of our past research sub-agents and an 
 
 - **Research answers arrive in one burst.** With server-side search, thinking models release nothing after a search until the answer is complete (Opus: 77 text pieces in 0.3 s, 8.9 s in). The UI streams each query as it starts instead.
 - **The remaining failures are mostly source quality:** about 5 of the 12 final failures used a third-party page when the vendor's page was in the results.
-- **The planner adds about 2 s to every turn.**
+- **The planner adds about 2 s to most turns.** Small talk skips it. A speculative writer that runs alongside it is built and tested, but off until a paid eval shows it doesn't hurt answers.
 - **Single user, local memory.** There's no way yet to say "forget that".
 
 ## With another week
 
 1. **Make primary sources a hard step.** If a key number comes from a third party, run one more search restricted with `allowed_domains` to the vendor before answering.
 2. **Calibrate cost against the console's usage export,** instead of a price table.
-3. **Measure guard recall:** seed answers with wrong numbers and count how many it catches.
-4. **A fast path for obvious small talk,** and start the writer while the planner is still running.
+3. **Label-aware number checks:** compare the price next to the same plan name in the excerpt, so "right page, wrong row" (0% caught today) gets caught.
+4. **Turn on the speculative writer** after an eval comparing its answers and real cost with the planner-first path.
 5. **"Watch these 5 CRMs":** a daily re-check of stored claims, plus memory controls ("forget that").
